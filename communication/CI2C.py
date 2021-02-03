@@ -12,7 +12,7 @@ import CStringUtil
 class CI2C:
     def __init__(self):
         self.i2cBusNum = 1
-        self.i2c = smbus.SUBus(self.i2cBusNum)
+        self.i2c = smbus.SMBus(self.i2cBusNum)
         self.mode = "master"
         self.addressList = []
         
