@@ -25,7 +25,9 @@ class CI2C:
     def detectAll(self):
         cmd = ['i2cdetect', '-y', str(self.i2cBusNum)]
         addr = subprocess.check_output(cmd)
-        addr = CStringUtil.combineChar( addr, ' ')
+        su = CStringUtil()
+        
+        addr = su.combineChar( addr, ' ')
         self.addressList = CStringUtil.splitMatrixBy( addr, ' ')
         
         
