@@ -34,6 +34,6 @@ if __name__ == "__main__":
     print(array)
     
     string = 'a,b,,,,c,d,e\n'
-    rep = su.replaceContinuousCharAs(string, ',')
+    rep = su.combineChar(string, ',')
     print(rep)
     
