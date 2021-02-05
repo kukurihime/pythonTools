@@ -27,8 +27,8 @@ class CI2C:
         addr = subprocess.check_output(cmd)
         su = CStringUtil.CStringUtil()
         
-        addr = su.combineChar( addr, ' ')
-        self.addressList = CStringUtil.splitMatrixBy( addr, ' ')
+        addr = su.combineChar( addr.decode('utf-8'), ' ')
+        self.addressList = su.splitMatrixBy( addr, ' ')
         
         
 if __name__ == "__main__":

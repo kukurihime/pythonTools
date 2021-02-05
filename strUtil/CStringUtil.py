@@ -22,7 +22,6 @@ class CStringUtil:
     
     def combineChar(self, string, tar):
         pattern = tar + '+'
-        
         ret = re.sub( pattern, tar, string)
         return ret
     
@@ -33,7 +32,7 @@ if __name__ == "__main__":
     array = su.splitMatrixBy(string, ',')
     print(array)
     
-    string = 'a,b,,,,c,d,e\n'
-    rep = su.combineChar(string, ',')
+    string = 'a b    c d e\n'
+    rep = su.combineChar(string, ' ')
     print(rep)
     
