@@ -35,7 +35,7 @@ class CI2C:
         for i in range(len(tempAddr)):
             self.addressList.append(tempAddr[1][1:])
             
-        self.addressList = itertools.chain.from_iterable(self.addressList)                                                              
+        self.addressList = list(itertools.chain.from_iterable(self.addressList))                                                            
         
 if __name__ == "__main__":
     i2c = CI2C()
