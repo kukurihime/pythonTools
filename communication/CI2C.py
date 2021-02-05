@@ -5,6 +5,7 @@ Created on Mon Jan  4 15:22:13 2021
 
 @author: kukurihime
 """
+import itertools
 import smbus
 import subprocess
 import CStringUtil
@@ -24,12 +25,17 @@ class CI2C:
     
     def detectAll(self):
         cmd = ['i2cdetect', '-y', str(self.i2cBusNum)]
-        addr = subprocess.check_output(cmd)
+        tempAddr = subprocess.check_output(cmd)
         su = CStringUtil.CStringUtil()
         
-        addr = su.combineChar( addr.decode('utf-8'), ' ')
-        self.addressList = su.splitMatrixBy( addr, ' ')
-        self.addressList = self.addressList[1:][1:]
+        tempAddr = su.combineChar( tempAddr.decode('utf-8'), ' ')
+        tempAddr = su.splitMatrixBy( tempAddr, ' ')
+        tempAddr = tempAddr[1:]
+        self.addressList = []
+        for i in range(len(tempAddr)):
+            self.addressList.append(tempAddr[1][1:])
+            
+        self.addressList = itertools.chain.from_iterable(self.addressList)                                                              
         
 if __name__ == "__main__":
     i2c = CI2C()
