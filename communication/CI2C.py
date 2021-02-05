@@ -5,7 +5,6 @@ Created on Mon Jan  4 15:22:13 2021
 
 @author: kukurihime
 """
-import itertools
 import smbus
 import subprocess
 import CStringUtil
@@ -35,7 +34,8 @@ class CI2C:
         for i in range(len(tempAddr)):
             self.addressList.append(tempAddr[1][1:])
             
-        self.addressList = list(itertools.chain.from_iterable(self.addressList))                                                            
+        self.addressList = su.flatten(self.addressList)
+        self.addressList = [i for i in self.addressList if not i == '--']
         
 if __name__ == "__main__":
     i2c = CI2C()

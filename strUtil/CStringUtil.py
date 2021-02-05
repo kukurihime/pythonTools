@@ -6,6 +6,7 @@ Created on Sat Jan 30 16:46:57 2021
 @author: kukurihime
 """
 import re
+import itertools
 
 class CStringUtil:
     def __init__(self):
@@ -19,6 +20,9 @@ class CStringUtil:
             ret.append(retLine)
         
         return ret
+    
+    def flatten(self, string):
+        return list(itertools.chain.from_iterable(string))
     
     def combineChar(self, string, tar):
         pattern = tar + '+'
