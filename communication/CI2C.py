@@ -35,7 +35,7 @@ class CI2C:
             self.addressList.append(tempAddr[1][1:])
             
         self.addressList = su.flatten(self.addressList)
-        self.addressList = [i for i in self.addressList if not i == '--' or '']
+        self.addressList = [i for i in self.addressList if not i == '--' or '\n']
         
 if __name__ == "__main__":
     i2c = CI2C()
