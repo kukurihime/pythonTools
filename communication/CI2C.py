@@ -29,7 +29,7 @@ class CI2C:
         
         addr = su.combineChar( addr.decode('utf-8'), ' ')
         self.addressList = su.splitMatrixBy( addr, ' ')
-        
+        self.addressList = self.addressList[1:][1:]
         
 if __name__ == "__main__":
     i2c = CI2C()
