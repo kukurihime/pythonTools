@@ -9,6 +9,12 @@ import smbus
 import subprocess
 import CStringUtil
 
+class CI2C:
+    def __init__(self, address = 0x00, rate = 100000):
+        self.address = address
+        self.rate = rate
+        self.smbus = smbus.SMBus()
+        
 
 
 class CI2CAddressManager:
@@ -49,6 +55,9 @@ class CI2CAddressManager:
         self.addressList = su.flatten(self.addressList)
         self.addressList = [i for i in self.addressList if not i == '--']
         self.addressList = [i for i in self.addressList if not i == '']
+        if not self.addressNum() == 0:
+            self.addressList = ['0x' + s for s in self.AddressList]
+        
         
     def divAddress(self):
         return list(set(self.addressList) - set(self.previousAddrssList))
