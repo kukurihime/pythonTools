@@ -85,6 +85,10 @@ class CBinanceSQLOperator:
             return True
         else:
             return False
+    
+    def clearDB(self):
+        self.close()
+        os.remove(self.dbName + '.db')
         
     def registerBalancies(self, date, balancies):
         #add table if not exists
