@@ -39,10 +39,16 @@ class CFileUtil:
         return ret
     
     def isSameFile(self, file1, file2):
-        f1 = open(file1, 'rb').read()
-        h1 = hashlib.sha256(f1).hexdigest()
-        f2 = open(file2, 'rb').read()
-        h2 = hashlib.sha256(f2).hexdigest()
+        if os.path.isfile(file1):
+            f1 = open(file1, 'rb').read()
+            h1 = hashlib.sha256(f1).hexdigest()
+        else:
+            return False
+        if os.path.isfile(file2):
+            f2 = open(file2, 'rb').read()
+            h2 = hashlib.sha256(f2).hexdigest()
+        else:
+            return False
         
         if h1 == h2:
             return True

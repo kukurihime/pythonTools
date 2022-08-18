@@ -5,8 +5,7 @@ Created on Sun May  2 02:45:07 2021
 
 @author: kukurihime
 """
-import CFileUtil
-import datetime
+
 from binance.client import Client
 
 class CBinanceClient:
@@ -64,7 +63,7 @@ class CBinanceClient:
         except Exception as e:
             print('Exception Messege]{}'.format(e))
             return None
-        
+#crossMargin///////////////////////////////////////////////////////////////////////////////////////////////        
     def getMyCrossMarginTrades(self, pairSymbol):
         try:
             value = self.client.get_margin_trades(symbol=pairSymbol)
@@ -82,7 +81,25 @@ class CBinanceClient:
         except Exception as e:
             print('Exception Messege]{}'.format(e))
             return None
-    
+#IsolatedMargin////////////////////////////////////////////////////////////////////////////////////////////     
+    def getMyIsolateMarginTrades(self, pairSymbol):
+        try:
+            value = self.client.get_margin_trades(symbol=pairSymbol,isIsolated=True)
+            return value
+        except Exception as e:
+            print('Exception Messege]{}'.format(e))
+            return None
+        
+    def getMyIsolateMarginTradesAt(self, pairSymbol, startDate, endDate):
+        start = int(startDate.timestamp() * 1000)
+        end = int(endDate.timestamp() * 1000)
+        try:
+            value = self.client.get_margin_trades(symbol=pairSymbol, startTime = start, endTime = end, isIsolated=True)
+            return value
+        except Exception as e:
+            print('Exception Messege]{}'.format(e))
+            return None
+
         
     def getAllOrders(self, pair):
         try:
@@ -92,7 +109,7 @@ class CBinanceClient:
             print('Exception Messege]{}'.format(e))
             return None
         
-    def getMarginAccountAsset(self):
+    def getCrossMarginAccountAsset(self):
         try:
             value = self.client.get_margin_account()
             value = value['userAssets']
@@ -100,6 +117,16 @@ class CBinanceClient:
         except Exception as e:
             print('Exception Messege]{}'.format(e))
             return None
+        
+    def getIsolateMarginAccountAsset(self):
+        try:
+            value = self.client.get_isolated_margin_account()
+            value = value['assets']
+            return value
+        except Exception as e:
+            print('Exception Messege]{}'.format(e))
+            return None
+    
     
     def getAccontSpotSnapshot(self):
         try:

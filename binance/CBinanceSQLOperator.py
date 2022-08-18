@@ -22,6 +22,8 @@ class CBinanceSQLOperator:
         self.sqlo = CSQLiteOperator.CSQLiteOperator(self.dbName)
         
         self.timeTable = {'asset':1, 'productTrade':1000, 'crossMarginTrade':1000,'ticker':1}
+
+#operate///////////////////////////////////////////////////////////////////////////////////
         
     def connect(self):
         if self.readOnly:
@@ -88,7 +90,28 @@ class CBinanceSQLOperator:
     
     def clearDB(self):
         self.close()
-        os.remove(self.dbName + '.db')
+        os.remove(self.dbName)
+
+    def timeConvert(self, epochTime, cat):
+        return epochTime * self.timeTable[cat]
+    
+    def timeResume(self, bTime, cat):
+        return bTime / self.timeTable[cat]
+    
+    def timeResumeProductTrade(self, bTime):
+        return self.timeResume(bTime, 'productTrade')
+    
+    def timeResumeCrossMarginTrade(self, bTime):
+        return self.timeResume(bTime, 'crossMarginTrade')
+        
+    def commit(self):
+        self.sqlo.commit()
+        
+    def finish(self):
+        self.sqlo.close()
+
+#register////////////////////////////////////////////////////////////////////////////////////////
+
         
     def registerBalancies(self, date, balancies):
         #add table if not exists
@@ -107,6 +130,7 @@ class CBinanceSQLOperator:
                                 float(balance['locked']),\
                                 float(balance['free']) + float(balance['locked'])]\
                                 )
+            
     def registerTickers(self, date, tickers):
         #add table if not exists
         for ticker in tickers:
@@ -142,6 +166,50 @@ class CBinanceSQLOperator:
                                 float(asset['interest']),\
                                 float(asset['netAsset'])]\
                                 )
+            
+    def registerIsolateMarginAsset(self, date, isolateMarginAsset):
+        #add table if not exists
+        for asset in isolateMarginAsset:
+            tableName = 'isolateMarginAsset_' + asset['baseAsset']['asset']
+            if not(self.sqlo.isTableExists(tableName)):
+                self.createIsolateMargineAssetTable(tableName)
+        #add data
+        
+        for asset in isolateMarginAsset:
+            tableName = 'isolateMarginAsset_' + asset['baseAsset']['asset']
+            self.sqlo.insertData(tableName,\
+                                [int(date.timestamp()),\
+                                date.strftime('%Y-%m-%d %H:%M:%S'),\
+                                bool(asset['baseAsset']['borrowEnabled']),\
+                                float(asset['baseAsset']['borrowed']),\
+                                float(asset['baseAsset']['free']),\
+                                float(asset['baseAsset']['interest']),\
+                                float(asset['baseAsset']['locked']),\
+                                float(asset['baseAsset']['netAsset']),\
+                                float(asset['baseAsset']['netAssetOfBtc']),\
+                                bool(asset['baseAsset']['repayEnabled']),\
+                                float(asset['baseAsset']['totalAsset']),\
+                                bool(asset['quoteAsset']['borrowEnabled']),\
+                                float(asset['quoteAsset']['borrowed']),\
+                                float(asset['quoteAsset']['free']),\
+                                float(asset['quoteAsset']['interest']),\
+                                float(asset['quoteAsset']['locked']),\
+                                float(asset['quoteAsset']['netAsset']),\
+                                float(asset['quoteAsset']['netAssetOfBtc']),\
+                                bool(asset['quoteAsset']['repayEnabled']),\
+                                float(asset['quoteAsset']['totalAsset']),\
+                                bool(asset['isolatedCreated']),\
+                                float(asset['marginLevel']),\
+                                str(asset['marginLevelStatus']),\
+                                float(asset['marginRatio']),\
+                                float(asset['indexPrice']),\
+                                float(asset['liquidatePrice']),\
+                                float(asset['liquidateRate']),\
+                                bool(asset['tradeEnabled']),\
+                                bool(asset['enabled']),\
+                                ])
+                                
+    
     def registerProductTrades(self, trades):
         #trades include in a kind of pair
         for trade in trades:
@@ -185,6 +253,34 @@ class CBinanceSQLOperator:
                                 int(trade['orderId']),\
                                 float(trade['price']),\
                                 float(trade['qty']),\
+                                float(trade['quoteQty']),\
+                                float(trade['commission']),\
+                                str(trade['commissionAsset']),\
+                                int(trade['time']),\
+                                str(trade['isBuyer']),\
+                                str(trade['isMaker']),\
+                                str(trade['isBestMatch']),\
+                                str(trade['isIsolated'])]\
+                                )
+            else:
+                pass
+            
+    def registerIsolateMarginTrades(self, trades):                
+        for trade in trades:
+            tableName = 'isolateMarginTrade_' + trade['symbol']
+            if not(self.sqlo.isTableExists(tableName)):
+                self.createIsolateMarginTradeTable(tableName)
+                break
+        
+        for trade in trades:
+            tableName = 'isolateMarginTrade_' + trade['symbol']
+            if not(self.sqlo.isExists(tableName, 'id', trade['id'])):
+                self.sqlo.insertData(tableName,\
+                                [int(trade['id']),\
+                                int(trade['orderId']),\
+                                float(trade['price']),\
+                                float(trade['qty']),\
+                                float(trade['quoteQty']),\
                                 float(trade['commission']),\
                                 trade['commissionAsset'],\
                                 int(trade['time']),\
@@ -195,6 +291,9 @@ class CBinanceSQLOperator:
                                 )
             else:
                 pass
+        
+#createDBTable/////////////////////////////////////////////////////////////////////////////////
+        
     def createAssetTable(self, tableName):
         print('create asset new table:', tableName, '...', end = '')
         self.sqlo.createTableIfNotExists(\
@@ -233,6 +332,43 @@ class CBinanceSQLOperator:
                                  ['netAsset', 'float', False]]\
                                 )
         print('O.K!')
+
+    def createIsolateMargineAssetTable(self, tableName):
+        print('create isolateMarginAsset new table:', tableName, '...', end = '')
+        self.sqlo.createTableIfNotExists(\
+                                tableName,\
+                                0,\
+                                [['epochTime', 'int', False],\
+                                 ['date', 'str', False],\
+                                 ['baseAsset_borrowEnable', 'bytes', False],\
+                                 ['baseAsset_borrowed', 'float', False],\
+                                 ['baseAsset_free', 'float', False],\
+                                 ['baseAsset_interest', 'float', False],\
+                                 ['baseAsset_locked', 'float', False],\
+                                 ['baseAsset_netAsset', 'float', False],\
+                                 ['baseAsset_netAssetOfBtc', 'float', False],\
+                                 ['baseAsset_repayEnabled', 'bytes', False],\
+                                 ['baseAsset_totalAsset', 'float', False],\
+                                 ['quoteAsset_borrowEnable', 'bytes', False],\
+                                 ['quoteAsset_borrowed', 'float', False],\
+                                 ['quoteAsset_free', 'float', False],\
+                                 ['quoteAsset_interest', 'float', False],\
+                                 ['quoteAsset_locked', 'float', False],\
+                                 ['quoteAsset_netAsset', 'float', False],\
+                                 ['quoteAsset_netAssetOfBtc', 'float', False],\
+                                 ['quoteAsset_repayEnabled', 'bytes', False],\
+                                 ['quoteAsset_totalAsset', 'float', False],\
+                                 ['isolatedCreated', 'bytes', False],\
+                                 ['marginLevel', 'float', False],\
+                                 ['marginLevelStatus', 'str', False],\
+                                 ['marginRatio', 'float', False],\
+                                 ['indexPrice', 'float', False],\
+                                 ['liquidatePrice', 'float', False],\
+                                 ['liquidateRate', 'float', False],\
+                                 ['tradeEnabled', 'bytes', False],\
+                                 ['enabled', 'bytes', False]])
+        print('O.K!')
+
         
     def createProductTradeTable(self, tableName):
         print('create product trade table:', tableName, '...', end = '')
@@ -264,6 +400,7 @@ class CBinanceSQLOperator:
                                  ['orderId', 'int', False],\
                                  ['price', 'float', False],\
                                  ['qty', 'float', False],\
+                                 ['quoteQty', 'float', False],\
                                  ['commission', 'float', False],\
                                  ['commissionAsset', 'str', False],\
                                  ['time', 'int', False],\
@@ -273,7 +410,29 @@ class CBinanceSQLOperator:
                                  ['isIsolated', 'str', False]]\
                                 )
         print('O.K!')
-        
+
+    def createIsolateMarginTradeTable(self, tableName):
+        print('create isolate trade table:', tableName, '...', end = '')
+        self.sqlo.createTableIfNotExists(\
+                                tableName,\
+                                0,\
+                                [['id', 'int', False],\
+                                 ['orderId', 'int', False],\
+                                 ['price', 'float', False],\
+                                 ['qty', 'float', False],\
+                                 ['quoteQty', 'float', False],\
+                                 ['commission', 'float', False],\
+                                 ['commissionAsset', 'str', False],\
+                                 ['time', 'int', False],\
+                                 ['isBuyer', 'str', False],\
+                                 ['isMaker', 'str', False],\
+                                 ['isBestMatch', 'str', False],\
+                                 ['isIsolated', 'str', False]]\
+                                )
+        print('O.K!')
+
+#setter/getter///////////////////////////////////////////////////////////////////////////
+
     def getTableAllContents(self, tableName):
         ret = self.sqlo.getTableAllContents(tableName)
         return ret
@@ -344,6 +503,7 @@ class CBinanceSQLOperator:
     def getDBName(self, date):
         ret = self.dbPrefix + date.strftime('%Y%m%d') + self.dbSuffix
         return ret
+    
 
     def getTableName(self, kind, name):
         #error process
@@ -355,20 +515,3 @@ class CBinanceSQLOperator:
     def setSearchPath(self, pathList):
         self.searchPath = pathList
 
-    def timeConvert(self, epochTime, cat):
-        return epochTime * self.timeTable[cat]
-    
-    def timeResume(self, bTime, cat):
-        return bTime / self.timeTable[cat]
-    
-    def timeResumeProductTrade(self, bTime):
-        return self.timeResume(bTime, 'productTrade')
-    
-    def timeResumeCrossMarginTrade(self, bTime):
-        return self.timeResume(bTime, 'crossMarginTrade')
-        
-    def commit(self):
-        self.sqlo.commit()
-        
-    def finish(self):
-        self.sqlo.close()
