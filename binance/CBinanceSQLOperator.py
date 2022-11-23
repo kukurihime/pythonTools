@@ -170,13 +170,13 @@ class CBinanceSQLOperator:
     def registerIsolateMarginAsset(self, date, isolateMarginAsset):
         #add table if not exists
         for asset in isolateMarginAsset:
-            tableName = 'isolateMarginAsset_' + asset['baseAsset']['asset']
+            tableName = 'isolateMarginAsset_' + asset['symbol']
             if not(self.sqlo.isTableExists(tableName)):
                 self.createIsolateMargineAssetTable(tableName)
         #add data
         
         for asset in isolateMarginAsset:
-            tableName = 'isolateMarginAsset_' + asset['baseAsset']['asset']
+            tableName = 'isolateMarginAsset_' + asset['symbol']
             self.sqlo.insertData(tableName,\
                                 [int(date.timestamp()),\
                                 date.strftime('%Y-%m-%d %H:%M:%S'),\
@@ -221,6 +221,7 @@ class CBinanceSQLOperator:
         for trade in trades:
             tableName = 'productTrade_' + trade['symbol']
             if not(self.sqlo.isExists(tableName, 'id', trade['id'])):
+                print('regsterProductTrade_id:', trade['id'])
                 self.sqlo.insertData(tableName,\
                                 [int(trade['id']),\
                                 int(trade['orderId']),\
@@ -248,6 +249,7 @@ class CBinanceSQLOperator:
         for trade in trades:
             tableName = 'crossMarginTrade_' + trade['symbol']
             if not(self.sqlo.isExists(tableName, 'id', trade['id'])):
+                print('regsterCrossMarginTrade_id:', trade['id'])
                 self.sqlo.insertData(tableName,\
                                 [int(trade['id']),\
                                 int(trade['orderId']),\
@@ -275,6 +277,7 @@ class CBinanceSQLOperator:
         for trade in trades:
             tableName = 'isolateMarginTrade_' + trade['symbol']
             if not(self.sqlo.isExists(tableName, 'id', trade['id'])):
+                print('registerIsolateMarginTrade_id:', trade)
                 self.sqlo.insertData(tableName,\
                                 [int(trade['id']),\
                                 int(trade['orderId']),\

@@ -7,10 +7,12 @@ Created on Sun May  2 02:45:07 2021
 """
 
 from binance.client import Client
+import CBinanceAPIKeyManager
 
 class CBinanceClient:
-    def __init__(self, keys):
-        self.client = Client(keys["APIKey"], keys["secret"])
+    def __init__(self, keyPath):
+        self.bAPIKeyM = CBinanceAPIKeyManager.CBinanceAPIKeyManager(keyPath)
+        self.client = Client(self.bAPIKeyM.getKeysAsDictionary()["APIKey"], self.bAPIKeyM.getKeysAsDictionary()["secret"])
         
     def getAccount(self):
         try:
@@ -153,5 +155,16 @@ class CBinanceClient:
         except Exception as e:
             print('Exception Messege]{}'.format(e))
             return None
+    
+if __name__ == '__main__':
+    #--------------------------------
+    path = "~/secure/binance.txt"
+    bc = CBinanceClient( path )
+    #--------------------------------
+    
+    ret = bc.getMyIsolateMarginTrades('ADAUSDT')
+    
+    print(ret)
+    
     
     
