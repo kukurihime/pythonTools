@@ -21,6 +21,18 @@ class CStringUtil:
         
         return ret
     
+    def columnInMatrix(self, matrix, column):
+        minLen = len(matrix[0])
+        for row in matrix:
+            if minLen > len(row):
+                minLen = len(row)
+        
+        if column >= minLen:
+            return False
+                
+        ret = [ matrix[ i ][ column ] for i in range( len( matrix ) ) ]
+        return ret
+    
     def flatten(self, string):
         return list(itertools.chain.from_iterable(string))
     
@@ -36,7 +48,6 @@ if __name__ == "__main__":
     array = su.splitMatrixBy(string, ',')
     print(array)
     
-    string = 'a b    c d e\n'
-    rep = su.combineChar(string, ' ')
+    rep = su.columnInMatrix(array, 3)
     print(rep)
     
