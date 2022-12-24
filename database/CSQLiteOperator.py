@@ -151,6 +151,13 @@ class CSQLiteOperator:
             ret = self.cursor.fetchall()
         return ret
     
+    def getTablesContentsAt(self, tableList, rangeColName, rangeStart, rangeEnd, getColNameList):
+        ret = []
+        for tableName in tableList:
+            ret += self.getTableContentsAt(tableName, rangeColName, rangeStart, rangeEnd, getColNameList)
+        
+        return ret
+    
     def commit(self):
         self.db.commit()
         

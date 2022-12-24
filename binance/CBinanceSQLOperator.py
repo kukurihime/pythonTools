@@ -500,7 +500,7 @@ class CBinanceSQLOperator:
             tar = startDate + divDate
             if self.isDBExists(tar):
                 self.resetDBDate(tar)
-                ret += self.sqlo.getMultiTableContentsAt(tableNames, 'time', self.timeConvert(start, cat), self.timeConvert(end, cat), getColNameList)
+                ret += self.sqlo.getTablesContentsAt(tableNames, 'time', self.timeConvert(start, cat), self.timeConvert(end, cat), getColNameList)
         return ret
 
     def getDBName(self, date):

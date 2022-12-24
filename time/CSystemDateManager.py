@@ -13,7 +13,7 @@ class CSystemDateManager():
         self.systemBootTime = datetime.datetime.now()
         self.startTimeInDay = datetime.time(0, 0, 0 )
         self.endTimeInDay = datetime.time(23, 59,59, 999000)
-        
+    
         self.todayDate = self.systemBootTime
         
         self.todayDateStart = datetime.datetime.combine(self.todayDate, self.startTimeInDay)
@@ -23,6 +23,9 @@ class CSystemDateManager():
         
     def getSystemBootTime(self):
         return self.systemBootTime
+    
+    def getNow(self):
+        return datetime.datetime.now()
         
     def updateDate(self):
         self.preDate = self.todayDate
