@@ -14,11 +14,12 @@ import time
 
 class CPigpio(CSingletonMeta):
     pi = pigpio.pi()
-    def __init__(self, pi):
-        self.pi = pi
+    def __init__(self):
+        self.pi = CPigpio.pi()
         
     def piGpio(self):
         return self.pi
+
     
 class CRPiOutpuPin(CPin.COutputPin):
     def __init__(self, pinNo):
