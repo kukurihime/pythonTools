@@ -13,8 +13,10 @@ import pigpio
 import time
 
 class CPigpio(CSingletonMeta):
-    def __init__(self):
-        self.pi = pigpio.pi()
+    pi = pigpio.pi()
+    def __init__(self, pi):
+        self.pi = pi
+        
     def piGpio(self):
         return self.pi
     
