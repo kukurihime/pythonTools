@@ -29,5 +29,5 @@ if __name__ == "__main__":
             self.addPwmPin(self.pwm1)
             
     t = test()
-    t.pwm1.on(0.8)
+    t.pwmPin[0].on(0.8)
     
