@@ -49,7 +49,10 @@ class CRpiPwmPin(CPin.CPwmPin):
         self.piGpio.piGpio().hardware_PWM(self.pinNo, self.freq, self.rpiDutyOff)
         
 if __name__ == "__main__":
-    pwmPin = CRpiPwmPin(12, 500000)
-    pwmPin.on(0.8)
+    pwmPin1 = CRpiPwmPin(12, 500000)
+    pwmPin2 = CRpiPwmPin(13, 500000)
+    pwmPin1.on(0.8)
+    pwmPin2.on(0.8)
     time.sleep(5)
-    pwmPin.off()
+    pwmPin1.off()
+    pwmPin2.off()
