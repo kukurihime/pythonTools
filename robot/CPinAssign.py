@@ -30,4 +30,6 @@ if __name__ == "__main__":
             
     t = test()
     t.pwmPin[0].on(0.8)
+    t.pwmPin[0].off()
+    
     
