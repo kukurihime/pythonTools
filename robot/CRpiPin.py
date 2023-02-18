@@ -12,7 +12,7 @@ import CSingletonMeta
 import pigpio
 import time
 
-class CPigpio(metaclass=CSingletonMeta):
+class CPigpio(metaclass=CSingletonMeta.CSingletonMeta):
     pi = pigpio.pi()
     def __init__(self):
         self.pi = CPigpio.pi()
