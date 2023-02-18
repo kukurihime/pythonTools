@@ -24,7 +24,7 @@ if __name__ == "__main__":
     
     class test(CPinAssign):
         def __init__(self):
-            super.__init__()
+            super().__init__()
             self.pwm1 = CRpiPin.CRpiPwmPin(12,500000)
             self.addPwmPin(self.pwm1)
             
