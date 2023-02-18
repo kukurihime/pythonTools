@@ -14,7 +14,32 @@ class CFileUtil:
     def __init__(self):
         self.fp = None
         self.path = ""
+        self.searchPath = [ './' ]
         self.fpIs = False
+        
+    def setSearchPathList(self, pathList):
+        self.searchPath = pathList
+        
+    def addSearchPath(self, path):
+        self.searchPath.append( path )
+        
+    def fileExistsInSearchPath( self, searchFileName ):
+        for p in self.searchPath:
+            if os.path.isfile( p + searchFileName):
+                return True
+            else:
+                pass
+        return False
+    
+    def getFullPathInSearchPath(self, searchFileName ):
+        for p in self.searchPath:
+            if os.path.isfile( p + searchFileName):
+                return p + searchFileName
+            else:
+                pass
+        return False
+        
+
         
     def openFile(self):
         self.fp = open(self.path)

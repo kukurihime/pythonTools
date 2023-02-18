@@ -7,17 +7,17 @@ Created on Sun Nov 27 10:49:58 2022
 """
 
 import datetime
+import CDateUtil
 
-class CSystemDateManager():
+class CSystemDateManager(CDateUtil.CDateUtil):
     def __init__(self):
+        super().__init__()
         self.systemBootTime = datetime.datetime.now()
-        self.startTimeInDay = datetime.time(0, 0, 0 )
-        self.endTimeInDay = datetime.time(23, 59,59, 999000)
     
         self.todayDate = self.systemBootTime
-        
-        self.todayDateStart = datetime.datetime.combine(self.todayDate, self.startTimeInDay)
-        self.todayDateEnd = datetime.datetime.combine(self.todayDate, self.endTimeInDay)
+
+        self.todayDateStart = self.startInDate(self.todayDate)
+        self.todayDateEnd = self.endInDate(self.todayDate)
         
         self.preDate = self.systemBootTime
         
@@ -32,6 +32,7 @@ class CSystemDateManager():
         self.todayDate = datetime.datetime.now()
         self.todayDateStart = datetime.datetime.combine(self.todayDate, self.startTimeInDay)
         self.todayDateEnd = datetime.datetime.combine(self.todayDate, self.endTimeInDay)
+        super().updateDate()
         
     def getTodayDate(self):
         return self.todayDate

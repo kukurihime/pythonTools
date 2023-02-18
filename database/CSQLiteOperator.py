@@ -7,6 +7,7 @@ Created on Fri May 21 00:14:11 2021
 """
 
 import sqlite3 as sq
+import glob
 
 class CSQLiteOperator:
     def __init__(self, dbName):
@@ -35,7 +36,9 @@ class CSQLiteOperator:
         
     def connectReadOnly(self, path = './'):
         dbName = f'file:{self.dbName}?mode=ro'
+        print(dbName)
         self.db = sq.connect( dbName, uri = True )
+        print(self.db)
         if self.db != None:
             self.cursor = self.db.cursor()
             self.connectedFlg = True
@@ -46,6 +49,16 @@ class CSQLiteOperator:
         self.cursor.close()
         self.db.close()
         self.connectedFlg = False
+        
+    def checkInTransactionInPath(self, path):
+        files = glob.glob(path + "*.db")
+        for file in files:
+            print(file)
+            self.dbName = file
+            self.connect()
+            print(self.db.in_transaction)
+            
+            
         
     def createTableIfNotExists(self, tableName, primaryKeyColumn, dataList):
         #dataList: [[name, type, autoIncrement:boolean},[name2, type2, ...]]
@@ -177,4 +190,9 @@ class CSQLiteOperator:
         
         return ret
         
+if __name__ == "__main__":
+    sqlo = CSQLiteOperator("a")
+    path = "/home/kukurihime/networkPublic/dirac_binanceDatabase/"
+    sqlo.checkInTransactionInPath(path)
+    
     

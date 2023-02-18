@@ -8,20 +8,23 @@ Created on Fri May 21 01:08:42 2021
 import os
 import datetime
 import CSQLiteOperator
+import CFileUtil
 
 class CBinanceSQLOperator:
     def __init__(self, date, path = './', readOnly = True):
         self.dbPrefix = 'binanceLog_'
         self.dbSuffix = '.db'
         self.dbDummyDate = datetime.datetime(2020,1,1)
+        self.latestDatabaseDate = (2112, 9, 3)
         self.path = path
         self.dbName = self.path + self.getDBName(date)
         self.readOnly = readOnly
         self.dbConnectFlg = False
+        self.fu = CFileUtil.CFileUtil()
         self.searchPath = ['./']
         self.sqlo = CSQLiteOperator.CSQLiteOperator(self.dbName)
         
-        self.timeTable = {'asset':1, 'productTrade':1000, 'crossMarginTrade':1000,'ticker':1}
+        self.timeTable = {'asset':1, 'productTrade':1000, 'crossMarginTrade':1000, 'isolateMarginTrade':1000, 'ticker':1}
 
 #operate///////////////////////////////////////////////////////////////////////////////////
         
@@ -37,19 +40,25 @@ class CBinanceSQLOperator:
         else:
             pass
         
+    def changeWriteMode(self):
+        self.readOnly = False
+        self.resetDB()
+    
+    def changeReadOnlyMode(self):
+        self.readOnly = True
+        self.resetDB()
+        
     def isConnected(self):
         return self.dbConnectFlg
 
-    def isDBExists(self, date):
-        for p in self.searchPath:
-            #print(p)
-            searchFileName = p + self.getDBName(date)
-            if os.path.isfile(searchFileName):
-                return True
-            else:
-                pass
-        return False        
-
+    def isDBExists(self, f):
+        dtt = type(datetime.datetime.now())
+        if type(f) == dtt:
+            searchFileName = self.getDBName(f)
+        else:
+            searchFileName = f
+        return self.fu.fileExistsInSearchPath( searchFileName )
+        
     def isTableExists(self, tableName):
         return self.sqlo.isTableExists(tableName)
     
@@ -57,34 +66,33 @@ class CBinanceSQLOperator:
         return self.sqlo.isExists(tableName, colName, val)
     
     def whereDBExists(self, date):
-        for p in self.searchPath:
-            searchFileName = p + self.getDBName(date)
-            if os.path.isfile(searchFileName):
-                return searchFileName
-            else:
-                pass
-        return False
+        searchFileName = self.getDBName( date )
+        return self.fu.getFullPathInSearchPath( searchFileName )
         
     def createDB(self, date):
         self.dbName = self.path + self.getDBName(date)
         self.sqlo.createDB(self.dbName)
         self.dbConnectFlg = False
         
-    def resetDBDate(self, date):
+    def resetDB(self, date=False):
         if self.sqlo.isConnected():
             self.sqlo.close()
             
         self.dbConnectFlg = False
-        self.dbName = self.path + self.getDBName(date)
+        if date != False:
+            self.dbName = self.path + self.getDBName(date)
         
-        if self.isDBExists(date):
+        if self.isDBExists(self.getDBName(date)):
             self.sqlo = CSQLiteOperator.CSQLiteOperator(self.dbName)
             if self.readOnly:
-                self.sqlo.connectReadOnly()
+                self.dbConnectFlg = self.sqlo.connectReadOnly()
             else:
-                self.sqlo.connect()
-            self.dbConnectFlg = True
-            return True
+                self.dbConnectFlg = self.sqlo.connect()
+            
+            if self.dbConnectFlg:
+                return True
+            else:
+                return False
         else:
             return False
     
@@ -103,6 +111,9 @@ class CBinanceSQLOperator:
     
     def timeResumeCrossMarginTrade(self, bTime):
         return self.timeResume(bTime, 'crossMarginTrade')
+    
+    def timeResumeisolateMarginTrade(self, bTime):
+        return self.timeResume(bTime, 'isolateMarginTrade')
         
     def commit(self):
         self.sqlo.commit()
@@ -499,7 +510,7 @@ class CBinanceSQLOperator:
             divDate = datetime.timedelta(days = i)
             tar = startDate + divDate
             if self.isDBExists(tar):
-                self.resetDBDate(tar)
+                self.resetDB(tar)
                 ret += self.sqlo.getTablesContentsAt(tableNames, 'time', self.timeConvert(start, cat), self.timeConvert(end, cat), getColNameList)
         return ret
 
@@ -516,5 +527,5 @@ class CBinanceSQLOperator:
         self.resetDBDate(self.dbDummyDate)
             
     def setSearchPath(self, pathList):
-        self.searchPath = pathList
+        self.fu.setSearchPathList( pathList )
 
