@@ -21,7 +21,7 @@ class CPigpio(metaclass=CSingletonMeta.CSingletonMeta):
         return self.pi
 
     
-class CRPiOutpuPin(CPin.COutputPin):
+class CRpiOutpuPin(CPin.COutputPin):
     def __init__(self, pinNo):
         super().__init__(pinNo)
         self.piGpio = CPigpio()
