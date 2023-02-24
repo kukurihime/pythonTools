@@ -35,7 +35,7 @@ if __name__ == "__main__":
     class test(CPinAssign):
         def __init__(self):
             super().__init__()
-            self.pwm1 = CRpiPin.CRpiPwmPin(12,500000)
+            self.pwm1 = CRpiPin.CRpiPwmPin(12,800000)
             self.out1 = CRpiPin.CRpiOutputPin(16)
             self.md1 = CMotorDriver.CDrv8835([self.pwm1, self.out1], -1)
             self.addPwmPin(self.pwm1)
@@ -43,7 +43,7 @@ if __name__ == "__main__":
             self.addMotorDriver(self.md1)
             
             
-            self.pwm2 = CRpiPin.CRpiPwmPin(13,500000)
+            self.pwm2 = CRpiPin.CRpiPwmPin(13,800000)
             self.out2 = CRpiPin.CRpiOutputPin(20)
             self.md2 = CMotorDriver.CDrv8835([self.pwm2, self.out2], -1)
             self.addPwmPin(self.pwm2)
