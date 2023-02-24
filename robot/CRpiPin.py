@@ -21,7 +21,7 @@ class CPigpio(metaclass=CSingletonMeta.CSingletonMeta):
         return self.pi
 
     
-class CRpiOutpuPin(CPin.COutputPin):
+class CRpiOutputPin(CPin.COutputPin):
     def __init__(self, pinNo):
         super().__init__(pinNo)
         self.piGpio = CPigpio()
@@ -63,4 +63,4 @@ if __name__ == "__main__":
     outPin1.off()
     time.sleep(5)
     pwmPin1.off()
-    pwmPin2.off()
+    #pwmPin2.off()
