@@ -28,7 +28,7 @@ class CDrv8835(CMotorDriver):
         
     def forwardPower(self, power):
         #-1 <= power <= 1
-        cv = CCheckVariable()
+        cv = CCheckVariable.CCheckVariable()
         power = cv.maxMin( power, 1, -1)
         
         powerDirection = power * self.direction
