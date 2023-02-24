@@ -59,6 +59,7 @@ if __name__ == "__main__":
     print("left forward")
     t.motorDriver(0).forwardPower(0.8)
     time.sleep(3)
+    t.motorDriver(0).stop()
     
     print("left back")
     t.motorDriver(0).forwardPower(-0.8)
@@ -69,6 +70,7 @@ if __name__ == "__main__":
     print("right forward")
     t.motorDriver(1).forwardPower(0.8)
     time.sleep(3)
+    t.motorDriver(1).stop
     
     print("right back")
     t.motorDriver(1).forwardPower(-0.8)
