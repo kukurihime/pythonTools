@@ -48,7 +48,8 @@ class CRpiPwmPin(CPin.CPwmPin):
         self.piGpio.piGpio().hardware_PWM(self.pinNo, self.freq, self.pwmDuty(dutyRatio))
         
     def off(self):
-        self.piGpio.piGpio().hardware_PWM(self.pinNo, self.rpiPwmFreqOff, self.rpiDutyOff)
+        #self.piGpio.piGpio().hardware_PWM(self.pinNo, self.rpiPwmFreqOff, self.rpiDutyOff)
+        self.piGpio.piGpio().hardware_PWM(self.pinNo, self.freq, self.rpiDutyOff)
         
 if __name__ == "__main__":
     time.sleep(3)
