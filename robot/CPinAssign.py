@@ -44,5 +44,6 @@ if __name__ == "__main__":
             
     t = test()
     t.motorDriver(0).forwardPower(0.8)
+    t.motorDriver(0).stop()
     
     
