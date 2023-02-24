@@ -10,7 +10,7 @@ import CCheckVariable
 import CPin
 
 class CMotorDriver:
-    def __init__( self, direction = 1, pins ):
+    def __init__( self, pins, direction = 1 ):
         self.direction = direction #reverse: -1 or same: 1
         self.pins = pins
     
@@ -20,10 +20,10 @@ class CMotorDriver:
     def stop(self):
         pass
     
-class CDrv8835(CMotoDriver):
-    def __init__(self, direction = 1, pins):
+class CDrv8835(CMotorDriver):
+    def __init__(self, pins, direction = 1):
         self.pwmPin : CPin.CPwmPin = pins[0]
-        self.directionPin : CPin.COutputPin = pin[1]
+        self.directionPin : CPin.COutputPin = pins[1]
         super().__init__(direction, [self.pwmPin, self.directionPin])
         
     def forwardPower(self, power):
@@ -43,10 +43,6 @@ class CDrv8835(CMotoDriver):
         self.directionPin.off()
         self.pwmPin.off()
         
-if __name__ == "__main__":
-    import CRpiPin
-    import CPinAssign
-    
 
         
             
