@@ -47,7 +47,7 @@ if __name__ == "__main__":
     t.motorDriver(0).forwardPower(0.8)
     time.sleep(5)
     t.motorDriver(0).forwardPower(-0.8)
-    time.sleep(5)
+    time.sleep(10)
     t.motorDriver(0).stop()
     
     
