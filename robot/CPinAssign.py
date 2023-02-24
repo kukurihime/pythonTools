@@ -32,7 +32,6 @@ if __name__ == "__main__":
     import CMotorDriver
     import time
     
-    
     class test(CPinAssign):
         def __init__(self):
             super().__init__()
@@ -44,10 +43,14 @@ if __name__ == "__main__":
             self.addMotorDriver(self.md1)
             
     t = test()
+    
+    time.sleep(1)
     t.motorDriver(0).forwardPower(0.8)
     time.sleep(5)
     t.motorDriver(0).forwardPower(-0.8)
-    time.sleep(10)
+    time.sleep(5)
     t.motorDriver(0).stop()
+    
+    time.sleep(5)
     
     
