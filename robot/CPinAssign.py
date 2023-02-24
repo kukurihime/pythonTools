@@ -42,15 +42,58 @@ if __name__ == "__main__":
             self.addOutputPin(self.out1)
             self.addMotorDriver(self.md1)
             
+            
+            self.pwm2 = CRpiPin.CRpiPwmPin(13,500000)
+            self.out2 = CRpiPin.CRpiOutputPin(20)
+            self.md2 = CMotorDriver.CDrv8835([self.pwm2, self.out2], 1)
+            self.addPwmPin(self.pwm2)
+            self.addOutputPin(self.out2)
+            self.addMotorDriver(self.md2)
+            
+            
+            
+            
     t = test()
     
     #time.sleep(1)
     t.motorDriver(0).forwardPower(0.8)
-    time.sleep(5)
+    time.sleep(3)
     t.motorDriver(0).forwardPower(-0.8)
-    time.sleep(5)
+    time.sleep(3)
     t.motorDriver(0).stop()
+    time.sleep(1)
     
-    time.sleep(5)
+    t.motorDriver(1).forwardPower(0.8)
+    time.sleep(3)
+    t.motorDriver(1).forwardPower(-0.8)
+    time.sleep(3)
+    t.motorDriver(1).stop()
+    time.sleep(1)
+    
+    t.motorDriver(0).forwardPower(0.8)
+    time.sleep(3)
+    t.motorDriver(1).forwardPower(-0.8)
+    time.sleep(3)
+    t.motorDriver(0).stop()
+    t.motorDriver(1).stop()
+    time.sleep(1)
+    
+    t.motorDriver(0).forwardPower(0.8)
+    time.sleep(3)
+    t.motorDriver(1).forwardPower(0.8)
+    time.sleep(3)
+    t.motorDriver(0).stop()
+    t.motorDriver(1).stop()
+    time.sleep(1)
+    
+    t.motorDriver(0).forwardPower(-0.8)
+    time.sleep(3)
+    t.motorDriver(1).forwardPower(-0.8)
+    time.sleep(3)
+    t.motorDriver(0).stop()
+    t.motorDriver(1).stop()
+    time.sleep(1)
+    
+    
     
     
