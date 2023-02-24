@@ -13,6 +13,16 @@ class CCheckVariable:
     
     def getError(self):
         return self.error
+
+    def maxMin( value, maxValue, minValue):
+        if value >= maxValue:
+            ret = maxValue
+        elif value <= minValue:
+            ret = minValue
+        else:
+            ret = value
+            
+        return ret
     
     def checkDateStrYYYYMMDD(self, dateStr):    
         if len(dateStr) != 8:
