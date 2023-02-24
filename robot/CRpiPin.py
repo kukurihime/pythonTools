@@ -53,10 +53,14 @@ class CRpiPwmPin(CPin.CPwmPin):
         
 if __name__ == "__main__":
     time.sleep(3)
+    outPin1 = CRpiOutputPin(16)
     pwmPin1 = CRpiPwmPin(12, 500000)
-    pwmPin2 = CRpiPwmPin(13, 500000)
+    #pwmPin2 = CRpiPwmPin(13, 500000)
+    outPin1.on()
     pwmPin1.on(0.8)
-    pwmPin2.on(0.8)
+    #pwmPin2.on(0.8)
+    time.sleep(5)
+    outPin1.off()
     time.sleep(5)
     pwmPin1.off()
     pwmPin2.off()
