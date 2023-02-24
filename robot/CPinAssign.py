@@ -36,7 +36,7 @@ if __name__ == "__main__":
         def __init__(self):
             super().__init__()
             self.pwm1 = CRpiPin.CRpiPwmPin(12,500000)
-            self.out1 = CRpiPin.CRPiOutpuPin(16)
+            self.out1 = CRpiPin.CRpiOutpuPin(16)
             self.md1 = CMotorDriver.CDrv8835([self.pwm1, self.out1], -1)
             self.addPwmPin(self.pwm1)
             self.addOutputPin(self.out1)
