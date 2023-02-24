@@ -45,7 +45,7 @@ if __name__ == "__main__":
             
             self.pwm2 = CRpiPin.CRpiPwmPin(13,500000)
             self.out2 = CRpiPin.CRpiOutputPin(20)
-            self.md2 = CMotorDriver.CDrv8835([self.pwm2, self.out2], 1)
+            self.md2 = CMotorDriver.CDrv8835([self.pwm2, self.out2], -1)
             self.addPwmPin(self.pwm2)
             self.addOutputPin(self.out2)
             self.addMotorDriver(self.md2)
