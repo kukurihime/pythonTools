@@ -71,15 +71,21 @@ if __name__ == "__main__":
     time.sleep(1)
     
     t.motorDriver(0).forwardPower(0.8)
-    time.sleep(3)
     t.motorDriver(1).forwardPower(-0.8)
     time.sleep(3)
     t.motorDriver(0).stop()
     t.motorDriver(1).stop()
     time.sleep(1)
     
-    t.motorDriver(0).forwardPower(0.8)
+    t.motorDriver(0).forwardPower(-0.8)
+    t.motorDriver(1).forwardPower(0.8)
     time.sleep(3)
+    t.motorDriver(0).stop()
+    t.motorDriver(1).stop()
+    time.sleep(1)
+
+    
+    t.motorDriver(0).forwardPower(0.8)
     t.motorDriver(1).forwardPower(0.8)
     time.sleep(3)
     t.motorDriver(0).stop()
@@ -87,7 +93,6 @@ if __name__ == "__main__":
     time.sleep(1)
     
     t.motorDriver(0).forwardPower(-0.8)
-    time.sleep(3)
     t.motorDriver(1).forwardPower(-0.8)
     time.sleep(3)
     t.motorDriver(0).stop()
