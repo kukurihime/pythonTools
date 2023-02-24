@@ -25,8 +25,7 @@ class CRPiOutpuPin(CPin.COutputPin):
     def __init__(self, pinNo):
         super().__init__(pinNo)
         self.piGpio = CPigpio()
-        self.H = pigpio.HIGH()
-        self.L = pigpio.LOW()
+        
         
     def on(self):
         self.piGpio.piGpio().write(self.pinNo, self.H)
