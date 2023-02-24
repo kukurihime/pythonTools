@@ -27,10 +27,10 @@ class CRPiOutpuPin(CPin.COutputPin):
         self.piGpio = CPigpio()
         
     def on(self):
-        self.piGpio.piGpio().write(self.pin, self.H)
+        self.piGpio.piGpio().write(self.pinNo, self.H)
         
     def off(self):
-        self.piGpio.piGpio().write(self.pin, self.L)
+        self.piGpio.piGpio().write(self.pinNo, self.L)
         
 class CRpiPwmPin(CPin.CPwmPin):
     def __init__(self, pinNo, freq = 500000):
