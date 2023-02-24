@@ -14,7 +14,7 @@ class CCheckVariable:
     def getError(self):
         return self.error
 
-    def maxMin( value, maxValue, minValue):
+    def maxMin( self, value, maxValue, minValue):
         if value >= maxValue:
             ret = maxValue
         elif value <= minValue:
