@@ -40,7 +40,7 @@ if __name__ == "__main__":
             self.md1 = CMotorDriver.CDrv8835([self.pwm1, self.out1], 1)
             self.addPwmPin(self.pwm1)
             self.addOutputPin(self.out1)
-            
+            self.addMotorDriver(self.md1)
             
     t = test()
     t.motorDriver(0).forwardPower(0.8)
