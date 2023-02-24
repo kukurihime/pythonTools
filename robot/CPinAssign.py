@@ -56,22 +56,27 @@ if __name__ == "__main__":
     t = test()
     
     #time.sleep(1)
+    print("left forward")
     t.motorDriver(0).forwardPower(0.8)
     time.sleep(3)
     
+    print("left back")
     t.motorDriver(0).forwardPower(-0.8)
     time.sleep(3)
     t.motorDriver(0).stop()
     time.sleep(1)
     
+    print("right forward")
     t.motorDriver(1).forwardPower(0.8)
     time.sleep(3)
     
+    print("right back")
     t.motorDriver(1).forwardPower(-0.8)
     time.sleep(3)
     t.motorDriver(1).stop()
     time.sleep(1)
     
+    print("roll cw")
     t.motorDriver(0).forwardPower(0.8)
     t.motorDriver(1).forwardPower(-0.8)
     time.sleep(3)
@@ -79,6 +84,7 @@ if __name__ == "__main__":
     t.motorDriver(1).stop()
     time.sleep(1)
     
+    print("roll ccw")
     t.motorDriver(0).forwardPower(-0.8)
     t.motorDriver(1).forwardPower(0.8)
     time.sleep(3)
@@ -86,7 +92,7 @@ if __name__ == "__main__":
     t.motorDriver(1).stop()
     time.sleep(1)
 
-    
+    print("forward")
     t.motorDriver(0).forwardPower(0.8)
     t.motorDriver(1).forwardPower(0.8)
     time.sleep(3)
@@ -94,6 +100,7 @@ if __name__ == "__main__":
     t.motorDriver(1).stop()
     time.sleep(1)
     
+    print("back")
     t.motorDriver(0).forwardPower(-0.8)
     t.motorDriver(1).forwardPower(-0.8)
     time.sleep(3)
