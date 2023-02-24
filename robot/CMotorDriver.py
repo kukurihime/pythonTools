@@ -36,7 +36,8 @@ class CDrv8835(CMotorDriver):
             self.directionPin.off()
         else:
             self.directionPin.on()
-            
+        
+        print( power , abs(power))
         self.pwmPin.on(abs( power ) )
         
     def stop(self):
