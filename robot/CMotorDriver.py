@@ -24,7 +24,7 @@ class CDrv8835(CMotorDriver):
     def __init__(self, pins, direction = 1):
         self.pwmPin : CPin.CPwmPin = pins[0]
         self.directionPin : CPin.COutputPin = pins[1]
-        super().__init__(direction, [self.pwmPin, self.directionPin])
+        super().__init__([self.pwmPin, self.directionPin], direction)
         
     def forwardPower(self, power):
         #-1 <= power <= 1
