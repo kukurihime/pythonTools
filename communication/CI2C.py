@@ -13,7 +13,7 @@ import CStringUtil
 class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
     smb = None
     def __init__(self, busNo):
-        if self.clsGetInstance() == None:
+        if self.clsGetSmbus() == None:
             self.clsSetSmbus
         else:
             pass
