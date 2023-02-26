@@ -16,7 +16,7 @@ class CAccelarometer:
         
 class CGY521(CAccelarometer):
     def __init__(self, busNo):
-        self.i2cAddress = 0x68
+        self.I2CAddress = 0x68
         self.AXAddress = 0x3B
         self.AXSize = 2
         self.AYAddress = 0x3D
@@ -32,7 +32,7 @@ class CGY521(CAccelarometer):
         self.GZAddress = 0x47
         self.GZSize = 2
         
-        self.i2c =CI2C.CI2C(I2CAddress = self.i2cAddress)
+        self.i2c = CI2C.CI2C( I2CAddress = self.I2CAddress)
         
     def getAcce(self, num):
         if num == 0:
