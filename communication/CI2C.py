@@ -19,7 +19,7 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
             pass
         self.smb = CSmbusSingleton.smb
     
-    def smb(self):
+    def getSmb(self):
         return self.smb
             
     def clsSetSmbus(cls, busNo):
@@ -37,7 +37,7 @@ class CI2C:
         self.smb = CSmbusSingleton(busNo)
         
     def getData(self, dataAddress, size):
-        return self.smb.smb().read_i2c_block_data(self.I2CAddress, dataAddress, size)
+        return self.smb.getSmb().read_i2c_block_data(self.I2CAddress, dataAddress, size)
 
 
 class CI2CAddressManager:
