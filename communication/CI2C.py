@@ -7,14 +7,37 @@ Created on Mon Jan  4 15:22:13 2021
 """
 import smbus
 import subprocess
+import CSingletonMeta
 import CStringUtil
 
-class CI2C:
-    def __init__(self, address = 0x00, rate = 100000):
-        self.address = address
-        self.rate = rate
-        self.smbus = smbus.SMBus()
+class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
+    smb = None
+    def __init__(self, busNo):
+        if self.clsGetInstance() == None:
+            self.clsSetSmbus
+        else:
+            pass
+        self.smb = CSmbusSingleton.smb
+    
+    def smb(self):
+        return self.smb
+            
+    def clsSetSmbus(cls, busNo):
+        cls.smb = smbus.SMBus(busNo)
         
+    def clsGetSmbus(cls):
+        return cls.smbus
+    
+
+
+class CI2C:
+    def __init__(self, I2CAddress = 0x00, rate = 100000, busNo = 1):
+        self.I2CAddress = I2CAddress
+        self.rate = rate
+        self.smbus = CSmbusSingleton(busNo)
+        
+    def getData(self, dataAddress, size):
+        return self.smbus.smb().read_i2c_block_data(self.I2CAddress, dataAddress, size)
 
 
 class CI2CAddressManager:
