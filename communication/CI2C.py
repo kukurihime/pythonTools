@@ -45,6 +45,8 @@ class CI2CAddressManager:
         tempAddr = subprocess.check_output(cmd)
         su = CStringUtil.CStringUtil()
         
+        print(tempAddr)
+        
         tempAddr = su.combineChar( tempAddr.decode('utf-8'), ' ')
         tempAddr = su.splitMatrixBy( tempAddr, ' ')
         tempAddr = tempAddr[1:]
