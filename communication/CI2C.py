@@ -39,7 +39,7 @@ class CI2C:
         
     def getData(self, dataAddress, size):
         print(self.I2CAddress, dataAddress, size)
-        return self.smb.getSmb().read_i2c_block_data(self.I2CAddress, dataAddress, size)
+        return self.smb.getSmb().read_byte_data(self.I2CAddress, dataAddress)
 
 
 class CI2CAddressManager:
