@@ -26,7 +26,7 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
         cls.smb = smbus.SMBus(busNo)
         
     def clsGetSmbus(cls):
-        return cls.smbus
+        return cls.smb
     
 
 
