@@ -18,7 +18,7 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
             
         else:
             pass
-        self.smb = CSmbusSingleton.smb
+        self.smb = CSmbusSingleton.clsGetSmbus()
         print("init", self.smb)
         
     def getSmb(self):
