@@ -19,14 +19,13 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
         else:
             pass
         self.smb = self.clsGetSmbus()
-        print("init", self.smb)
         
     def getSmb(self):
         return self.smb
             
     def clsSetSmbus(cls, busNo):
         cls.smb = smbus.SMBus(busNo)
-        print(" clsSetSmbus", cls.smb)
+
     def clsGetSmbus(cls):
         return cls.smb
     
