@@ -15,16 +15,18 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
     def __init__(self, busNo):
         if self.clsGetSmbus() == None:
             self.clsSetSmbus(busNo)
+            
         else:
             pass
         self.smb = CSmbusSingleton.smb
-    
+        print(self.smb)
+        
     def getSmb(self):
         return self.smb
             
     def clsSetSmbus(cls, busNo):
         cls.smb = smbus.SMBus(busNo)
-        
+        print(cls.smb)
     def clsGetSmbus(cls):
         return cls.smb
     
