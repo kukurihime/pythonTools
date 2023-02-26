@@ -36,10 +36,12 @@ class CI2C:
         self.I2CAddress = I2CAddress
         self.rate = rate
         self.smb = CSmbusSingleton(busNo)
+    
+    def sendByteData(self, dataAddress, data):
+        self.smb.getSmb().write_byte_data(self.I2CAddress, dataAddress, data)
         
-    def getData(self, dataAddress, size):
-        print(self.I2CAddress, dataAddress, size)
-        return self.smb.getSmb().read_byte_data(self.I2CAddress, dataAddress+1)
+    def getByteData(self, dataAddress):
+        return self.smb.getSmb().read_byte_data(self.I2CAddress, dataAddress)
 
 
 class CI2CAddressManager:
