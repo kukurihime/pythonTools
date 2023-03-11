@@ -83,5 +83,5 @@ class CGY521(CAccelarometer):
     
 if __name__ == "__main__":
     gy521 = CGY521(1)
-    print(gy521.getAcce(0), gy521.getAcce(1),gy521.getAcce(2))
+    print(gy521.getAcceRow(0), gy521.getAcceRow(1),gy521.getAcceRow(2))
             
