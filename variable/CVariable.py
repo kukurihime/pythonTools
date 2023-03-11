@@ -51,7 +51,7 @@ class CHexValue:
             
         elif self.endian == 'big':
             for i in range( len(hexList) ):
-                ret = ret << 8 | hexList[len(i)]
+                ret = ret << 8 | hexList[i]
             
         return ret
     
