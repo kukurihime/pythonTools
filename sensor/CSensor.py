@@ -76,7 +76,7 @@ class CGY521(CAccelarometer):
         hexList = []
         
         for i in range( self.accSize ):
-            hexList.append( self.i2c.getByteData(self.AccAddress[num] + i) )
+            hexList.append( self.i2c.getByteData(self.accAddress[num] + i) )
         hv = CVariable.CHexValue(4, signed = True)
         return hv.hexListToDecimal(hexList)
     
