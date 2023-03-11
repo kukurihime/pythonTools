@@ -37,10 +37,11 @@ class CCheckVariable:
         except ValueError:
             return False
 
-class CHexVal:
-    def __init__(self, endian='little', convertList= [[ 0x00, 0.0]] ):
+class CHexValue:
+    def __init__(self, digit, signed = False, endian='little'):
+        self.digit = digit      #hex digit
         self.endian = endian
-        self.convertList = convertList
+        self.signed = signed   #True / False
         
     def connectHex(self, hexList):
         ret = 0x00
@@ -48,22 +49,39 @@ class CHexVal:
             for i in range( len(hexList) ):
                 ret = ret << 8 | hexList[len(hexList) -1 - i]
             
-        elif self.endian == 'bib':
+        elif self.endian == 'big':
             for i in range( len(hexList) ):
                 ret = ret << 8 | hexList[len(i)]
             
         return ret
+    
+    def hexToDecimal(self, hx):
+        if hx >= 2 ** ( self.digit * 4 ):
+            return False
+        else:
+            if self.signed:
+                mask = 0x01
+                for num in range( self.digit * 4 ):
+                    mask = mask | (0x01 << num )
+                signed_int = int(hx ^ mask ) * -1
+                return signed_int
                 
-                
-        
-        
- #   def hexToVal(self, hx):
-        
+            elif not self.signed:
+                return int( hx )
+            else:
+                return False
+            
+    def hexListToDecimal(self, hexList):
+        return self.hexToDecimal(self.connectHex(hexList))
+
+
+
         
 if __name__ == "__main__":
-    hexList = [0xd1, 0xc2, 0xb3, 0xa4]
-    hv = CHexVal()
+    hexList = [0xd1, 0xc2]
+    hv = CHexValue(4, signed = True)
     ret = hv.connectHex(hexList)
     
+    print("{0:b}".format(ret))
     print("{0:x}".format(ret))
-    
+    print(hv.hexToDecimal(ret))

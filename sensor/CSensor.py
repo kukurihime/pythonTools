@@ -8,6 +8,35 @@ Created on Sun Feb 26 13:52:25 2023
 
 import time
 import CI2C
+import CVariable
+
+class CSensor:
+    def __init__(self, resolution):
+        self.valHex = 0x00
+        self.offset = 0x00
+        self.resolution = resolution
+        
+    def getRowHex(self):
+        return self.hex
+    
+    def getHex(self):
+        return self.hex - self.offset
+    
+    def getRowValue(self):
+        pass
+    
+    def getValue(self):
+        pass
+    
+    def setOffsetHex(self, valHex):
+        self.offset = valHex
+        
+    def hexToVal(self, hx):
+        pass
+    
+    def valToHex(self):
+        pass
+
 
 class CAccelarometer:
     def __init__(self):
@@ -15,18 +44,16 @@ class CAccelarometer:
         
     def setX(self, x):
         self.x = x
-        
+
 class CGY521(CAccelarometer):
     def __init__(self, busNo):
         self.I2CAddress = 0x68
-        self.AXAddress = 0x3B
-        self.AYAddress = 0x3D
-        self.AZAddress = 0x3F
-        self.TempratureAddress = 0x41
-        self.GXAddress = 0x43
-        self.GYAddress = 0x45
-        self.GZAddress = 0x47
-        
+        self.accAddress = [ 0x3B, 0x3D, 0x3F] #acc x/y/z
+        self.accSize = 2
+        self.temperatureAddress = [0x41]
+        self.temperatureSize = 2
+        self.gyroAddress = [ 0x43, 0x45, 0x47] #gyro x/y/z
+        self.gyroSize = 2
         self.i2c = CI2C.CI2C( I2CAddress = self.I2CAddress)
         
         self.setup()
@@ -44,16 +71,14 @@ class CGY521(CAccelarometer):
         self.i2c.sendByteData(0x1A, 0x00) #config
         self.i2c.sendByteData(0x1B, 0x18) #+-2000/s
         self.i2c.sendByteData(0x1C, 0x10) #+-8g
+    
+    def getAcceRow(self, num):
+        hexList = []
         
-    def getAcce(self, num):
-        if num == 0:
-            return self.i2c.getByteData(self.AXAddress)
-        elif num == 1:
-            return self.i2c.getByteData(self.AYAddress)
-        elif num == 2:
-            return self.i2c.getByteData(self.AZAddress)
-        else:
-            pass
+        for i in range( self.accSize ):
+            hexList.append( self.i2c.getByteData(self.AXAddress[num] + i) )
+        hv = CVariable.CHexValue(4, signed = True)
+        return hv.hexListToDecimal(hexList)
     
     
 if __name__ == "__main__":
