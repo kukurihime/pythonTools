@@ -38,10 +38,27 @@ class CCheckVariable:
             return False
 
 class CHexValue:
-    def __init__(self, digit, signed = False, endian='little'):
+    def __init__(self, hexValue = 0x00, digit = 2, signed = False, endian='little'):
+        self.hexValue = hexValue
         self.digit = digit      #hex digit
         self.endian = endian
         self.signed = signed   #True / False
+        
+    def __add__(self, other):
+        return self.getDecimal() + other.getDecimal()
+        
+        
+    def getHex(self):
+        return self.hexValue
+    
+    def getDecimal(self):
+        return self.hexToDecimal(self.hexValue)
+        
+    def setHex(self, hx):
+        self.hexValue = hx
+        
+    def setHexByHexList(self, hexList):
+        self.hexValue = self.connectHex(hexList)
         
     def connectHex(self, hexList):
         ret = 0x00
@@ -70,6 +87,23 @@ class CHexValue:
                 return int( hx )
             else:
                 return False
+            
+    def decimalToHex(self, dec):
+        if self.signed:
+            maxDecimal = 2 ** (self.digit * 4 - 1) -1
+            minDecimal = - (2 ** self.digit * 4 - 1)
+        else:
+            maxDecimal = 2 ** (self.digit * 4) - 1
+            minDecimal = 0
+        
+        if dec > maxDecimal or dec < minDecimal:
+            return False
+        
+        
+        
+        
+        
+            
             
     def hexListToDecimal(self, hexList):
         return self.hexToDecimal(self.connectHex(hexList))

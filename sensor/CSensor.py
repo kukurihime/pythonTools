@@ -11,36 +11,53 @@ import CI2C
 import CVariable
 
 class CSensor:
-    def __init__(self, resolution):
-        self.valHex = 0x00
-        self.offset = 0x00
-        self.resolution = resolution
-        
-    def getRowHex(self):
-        return self.hex
+    def __init__(self, digit = 4, signed = True, endian = 'little', LSB, zeroHexValue):
+        self.digit = digit
+        self.valueHex = CVariable.CHexValue(self.digit, signed, endian)
+        self.offsetHex = CVariable.CHexValue(self.digit, signed, endian)
+        self.LSB = LSB #hx / value unit
+        self.zeroHexValue = zeroHexValue
     
-    def getHex(self):
-        return self.hex - self.offset
+    def getOffsetValueHex(self):
+        return self.valueHex - self.offsetHex
+    
+    def getRowHex(self):
+        return self.valueHex
+    
+    def getOffsetHex(self):
+        return self.offsetHex
     
     def getRowValue(self):
-        pass
+        return self.hexToVal(self.valueHex)
+    
+    def getOffsetValue(self):
+        return self.hexToVal(self.valueHex)
     
     def getValue(self):
-        pass
+        return self.hexToVal(self.valueHex) - self.hexToVal(self.offsetHex)
     
     def setOffsetHex(self, valHex):
         self.offset = valHex
         
     def hexToVal(self, hx):
+        hx / self.LSB + self.zeroHexValue
+    
+    def valToHex(self, value):
+        return ( value - self.zeroHexValue ) * self.LSB
+    
+    def update(self):
         pass
     
-    def valToHex(self):
-        pass
+class CI2CSensor(CSensor):
+    def __init__(self, digit = 4, signed = True, endian = 'little', LSB, zeroHexValue, i2cAddress):
+        super().__init__(digit, signed, endian, LSB, zeroHexValue)
+        
 
 
-class CAccelarometer:
+class CAccelarometer(CSensor):
     def __init__(self):
-        self.x = 0.0
+        super().__init__()
+        self.value = 0.0
         
     def setX(self, x):
         self.x = x
@@ -79,6 +96,7 @@ class CGY521(CAccelarometer):
             hexList.append( self.i2c.getByteData(self.accAddress[num] + i) )
         hv = CVariable.CHexValue(4, signed = True, endian = 'big')
         return hv.hexListToDecimal(hexList)
+    
     
     
 if __name__ == "__main__":
