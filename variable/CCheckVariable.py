@@ -37,33 +37,3 @@ class CCheckVariable:
         except ValueError:
             return False
 
-class CHexVal:
-    def __init__(self, endian='little', convertList= [[ 0x00, 0.0]] ):
-        self.endian = endian
-        self.convertList = convertList
-        
-    def connectHex(self, hexList):
-        ret = 0x00
-        if self.endian == 'little':
-            for i in range( len(hexList) ):
-                ret = ret << 8 | hexList[len(hexList) -1 - i]
-            
-        elif self.endian == 'bib':
-            for i in range( len(hexList) ):
-                ret = ret << 8 | hexList[len(i)]
-            
-        return ret
-                
-                
-        
-        
- #   def hexToVal(self, hx):
-        
-        
-if __name__ == "__main__":
-    hexList = [0xd1, 0xc2, 0xb3, 0xa4]
-    hv = CHexVal()
-    ret = hv.connectHex(hexList)
-    
-    print("{0:x}".format(ret))
-    

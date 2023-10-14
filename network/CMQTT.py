@@ -10,13 +10,12 @@ import time
 import paho.mqtt.client as mqtt
 import datetime
 
-class CMQTTSub:
-    def __init__(self, broker = '127.0.0.1', port = 1883, topic = 'default/default' , clientID = 'default'):
+class CMQTT:
+    def __init__(self, broker = '127.0.0.1', port = 1883, topic = 'default/default', clientID = 'default' ):
         self.broker = broker
         self.port = port
         self.topic = topic
         self.clientID = clientID
-        self.client = mqtt.Client(self.clientID, protocol = mqtt.MQTTv311)
         self.keepalive = 60
         self.firstReconnectDelay = 1
         self.ReconnectRate = 2
@@ -25,6 +24,12 @@ class CMQTTSub:
         self.modeDict = {'commandlineDisplay' : 0, 'noDisplay' : 1}
         self.mode = self.modeDict['commandlineDisplay']
         self.error = ''
+        
+
+class CMQTTSub( CMQTT ):
+    def __init__(self, broker = '127.0.0.1', port = 1883, topic = 'default/default' , clientID = 'default'):
+        super(broker, port, topic, clientID)
+        self.client = mqtt.Client(self.clientID, protocol = mqtt.MQTTv311)
         self.client.on_connect = self.onConnect
         self.client.on_disconnect = self.onDisconnect
         self.client.on_message = self.onMessage
