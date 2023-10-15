@@ -19,8 +19,13 @@ for i in range(100):
     print('acce:', gy521.getCategoryVal('acce'))
     print('gyro:', gy521.getCategoryVal('gyro'))
     print('temp:', gy521.getCategoryVal('temp'))
-    pre = time.time()
+    time.sleep(0.1)
+    pre = after
     after = time.time()
+    
+    
+    
+
 
 print('finish')
 
