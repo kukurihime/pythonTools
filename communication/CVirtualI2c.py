@@ -23,7 +23,7 @@ class CVirtualI2c:
         return self.i2cAddress
     
     def setI2cAddress(self, address):
-        self.I2cAddress = address
+        self.i2cAddress = address
         
     def getRate(self):
         return self.rate
