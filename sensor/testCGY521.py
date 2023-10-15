@@ -16,7 +16,8 @@ after = time.time()
 
 for i in range(100):
     gy521.readCategory('acce')
-    gy521.getCategoryVal('acce')
+    gy521.readCategory('gyro')
+    gy521.readCategory('temp')
     print(i, ":", after - pre)
     print('acce:', gy521.getCategoryVal('acce'))
     print('gyro:', gy521.getCategoryVal('gyro'))
