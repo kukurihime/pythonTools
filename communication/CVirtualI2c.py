@@ -8,7 +8,7 @@ Created on Mon Jan  4 15:22:13 2021
 
 class CVirtualI2c:
     def __init__(self, busId = 0, i2cAddress = 0x00, rate = 100000):
-        self.I2cAddress = i2cAddress
+        self.i2cAddress = i2cAddress
         self.rate = rate
         self.busId = busId
     
@@ -20,7 +20,7 @@ class CVirtualI2c:
 
 
     def getI2cAddress(self):
-        return self.I2cAddress
+        return self.i2cAddress
     
     def setI2cAddress(self, address):
         self.I2cAddress = address
