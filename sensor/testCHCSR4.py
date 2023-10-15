@@ -14,6 +14,7 @@ hcsr4 = CHCSR4.CHCSR4(CI2cRPi.CI2cRPi(busId = 1, i2cAddress = CHCSR4.i2cDefaultA
 pre = time.time()
 after = time.time()
 
+time.sleep(1)
 for i in range(100):
     hcsr4.readCategory('distance')
     print(i, ":", after - pre)

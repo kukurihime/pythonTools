@@ -33,7 +33,7 @@ class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
         self.addSensor(self.distanceSensor)
         
         self.mesureOrderAddress = 0xAE
-        self.measureOrder = 0x0 << 4 | 0x1
+        self.measureOrder = 0x01
         
         self.measureWaitTime = 0.05
         
