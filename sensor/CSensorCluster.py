@@ -49,6 +49,7 @@ class CSensorCluster:
         return ret
     
     def readCategory(self, category):
+        self.preOperation()
         targets = self.getTargetSensorList(category)
         
         for s in targets:
@@ -67,6 +68,9 @@ class CSensorCluster:
             return self.sensorDistanceList
         else:
             return False
+        
+    def preOperation(self):
+        pass
         
 if __name__ == '__main__':
     sc = CSensorCluster()
