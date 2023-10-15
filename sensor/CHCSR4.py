@@ -11,6 +11,7 @@ import CI2cSensorCluster
 import CVirtualI2c
 import CI2cSensor
 import time
+
 def i2cDefaultAddress():
     return 0x57
 
@@ -21,7 +22,7 @@ class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
         self.endian = 'big'
         self.signed = False
         
-        self.distanceStartAddress = 0xAF #acc x/y/z
+        self.distanceStartAddress = 0xAF
         self.length = 3
         self.resolution = 1 / 1000 / 1000 #m / sec^2
         self.zeroValueHex = 0x000000
@@ -31,7 +32,7 @@ class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
                                           role = 'distance')
         self.addSensor(self.distanceSensor)
         
-        self.mesureOrderAddress = 0xAE
+        self.mesureOrderAddress = 0xAF
         self.measureOrder = 0x01
         
         self.measureWaitTime = 0.05
@@ -44,4 +45,4 @@ class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
     
     def measure(self):
         self.i2cModule.sendByteData(self.mesureOrderAddress, self.measureOrder)
-        #time.sleep(self.measureWaitTime)
+        time.sleep(self.measureWaitTime)

@@ -10,7 +10,7 @@ import CHCSR4
 import CI2cRPi
 import time
 
-hcsr4 = CHCSR4.CHCSR4(CI2cRPi.CI2cRPi(busId = 1, i2cAddress = CHCSR4.i2cDefaultAddress(), rate = 9600))
+hcsr4 = CHCSR4.CHCSR4(CI2cRPi.CI2cRPi(busId = 1, i2cAddress = CHCSR4.i2cDefaultAddress(), rate = 115200))
 pre = time.time()
 after = time.time()
 
