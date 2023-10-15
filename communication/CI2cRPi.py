@@ -36,6 +36,7 @@ class CI2cRPi(CVirtualI2c.CVirtualI2c):
         self.smb = CSmbusSingleton(busNo)
     
     def sendByteData(self, dataAddress, data):
+        print('sendByteData:', self.i2cAddress, dataAddress, data)
         self.smb.getSmb().write_byte_data(self.i2cAddress, dataAddress, data)
         
     def getByteData(self, dataAddress):
