@@ -15,7 +15,7 @@ class CGY521(CI2cSensorCluster.CI2cSensorCluster):
     def __init__(self, i2cModule : CVirtualI2c.CVirtualI2c):
         super().__init__(i2cModule = i2cModule)
         
-        self.endian = 'big'
+        self.endian = 'little'
         self.signed = True
         
         self.accStartAddress = [ 0x3B, 0x3D, 0x3F] #acc x/y/z
@@ -35,7 +35,7 @@ class CGY521(CI2cSensorCluster.CI2cSensorCluster):
         self.addSensor(self.accY)
         self.addSensor(self.accZ)
         
-        self.temperatureStartAddress = [0x41]
+        self.temperatureStartAddress = 0x41
         self.temperatureLength = 2
         self.temperatureResolution = 1 / 340
         self.temperatureZeroValueHex = -521 - 340 * 35
