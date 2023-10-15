@@ -12,7 +12,7 @@ import COneByteHexArray
 
 
 class CDigitalSensor(CSensor.CSensor):
-    def __init__(self, role = 'generic', resolution = 1.0, zeroValueHex = 0x0000, signed = False, endian = 'little'):
+    def __init__(self, resolution = 1.0, zeroValueHex = 0x0000, signed = False, endian = 'little', role = 'generic'):
         super().__init__(role)
         self.resolution = resolution #value / hex unit
         self.zeroValueHex = zeroValueHex

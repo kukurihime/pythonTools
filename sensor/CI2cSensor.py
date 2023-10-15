@@ -11,9 +11,8 @@ import CVirtualI2c
 
 class CI2cSensor(CDigitalSensor.CDigitalSensor):
     def __init__(self, i2cModule : CVirtualI2c.CVirtualI2c, i2cRegisterStartAddress,  addressLength,
-                 role = 'generic',
-                 resolution, zeroValueHex, signed = True, endian = 'little'):
-        super().__init__(resolution, zeroValueHex, signed, endian)
+                 resolution, zeroValueHex, signed = True, endian = 'little', role = 'generic'):
+        super().__init__(resolution, zeroValueHex, signed, endian, role)
         self.i2cRegisterStartAddress = i2cRegisterStartAddress
         self.registerAddressLength = addressLength
         self.i2cModule = i2cModule

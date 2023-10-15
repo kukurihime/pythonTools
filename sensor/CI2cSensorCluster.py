@@ -12,5 +12,14 @@ class CI2cSensorCluster(CSensorCluster.CSensorCluster):
     def __init__(self, i2cModule : CVirtualI2c.CVirtualI2c):
         super().__init__()
         self.i2cModule = i2cModule
+        
+    def setI2cModule(self, i2cModule : CVirtualI2c.CVirtualI2c):
+        self.i2cModule = i2cModule
+        
+if __name__ == '__main__':
+    i2cm = CVirtualI2c.CVirtualI2c()
+    i2csc = CI2cSensorCluster(i2cm)
+    i2csc.setI2cModule(i2cm)
+    
 
             
