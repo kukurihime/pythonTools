@@ -52,8 +52,10 @@ class COneByteHexArray:
         
     def hexToDecimal(self):
         if self.signed:
+            print('signed:',self.signed)
             sign = self.getSerialHex() >> ( 8 * len(self.hexList) - 1)
             if sign == 1:
+                
                 return  self.getSerialHex() - ( 1 << ( 8 * len(self.hexList)) )
                 
             else:
