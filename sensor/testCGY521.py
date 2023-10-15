@@ -10,7 +10,7 @@ import CGY521
 import CI2cRPi
 import time
 
-gy521 = CGY521.CGY521(CI2cRPi.CI2cRPi(i2cAddress = 0x68))
+gy521 = CGY521.CGY521(CI2cRPi.CI2cRPi(busId = 1, i2cAddress = 0x68))
 pre = time.time()
 after = time.time()
 
