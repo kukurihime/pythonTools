@@ -35,8 +35,6 @@ class CDigitalSensor(CSensor.CSensor):
         return self.valueHexArray.getHexStrList()
         
     def hexToVal(self, hx):
-        print('hexToVal', hx, self.zeroValueHex)
-        print('hexToVal', (hx - self.zeroValueHex) * self.resolution)
         return (hx - self.zeroValueHex) * self.resolution 
     
 
