@@ -14,7 +14,7 @@ import COneByteHexArray
 class CDigitalSensor(CSensor.CSensor):
     def __init__(self, resolution = 1.0, zeroValueHex = 0x0000, signed = False, endian = 'little', role = 'generic'):
         super().__init__(role)
-        self.resolution = resolution #value / hex unit
+        self.resolution = resolution #value range / hex unit
         self.zeroValueHex = zeroValueHex
         self.valueHexArray = COneByteHexArray.COneByteHexArray([0x00, 0x00], signed, endian)
         self.offsetHexArray = COneByteHexArray.COneByteHexArray([0x00, 0x00], signed, endian)
@@ -30,16 +30,19 @@ class CDigitalSensor(CSensor.CSensor):
     def setZeroValueHex(self, hx):
         self.zeroValueHex = hx
         
+        
     def getRowDataByHexStr(self):
         return self.valueHexArray.getHexStrList()
         
     def hexToVal(self, hx):
+        print('hexToVal', hx, self.zeroValue)
+        print('hexToVal', (hx - self.zeroValueHex) * self.resolution)
         return (hx - self.zeroValueHex) * self.resolution 
     
 
 if __name__ == '__main__':
     
-    ds = CDigitalSensor( 0.1 )
+    ds = CDigitalSensor( resolution = 0.1 )
     
     
     ds.setZeroValueHex( 0x0006)
