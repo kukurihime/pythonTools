@@ -12,7 +12,7 @@ import CVirtualI2c
 import CI2cSensor
 import time
 def i2cDefaultAddress():
-    return 0x57
+    return 0x58
 
 class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
     def __init__(self, i2cModule : CVirtualI2c.CVirtualI2c):
