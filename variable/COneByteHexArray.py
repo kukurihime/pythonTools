@@ -61,6 +61,7 @@ class COneByteHexArray:
             else:
                 return self.getSerialHex()
         else:
+            print('unsigned')
             return self.getSerialHex() 
     
             
