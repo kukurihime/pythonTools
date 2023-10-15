@@ -21,11 +21,11 @@ class CDigitalSensor(CSensor.CSensor):
     
     def setValueHexList(self, hexStrList):
         self.valueHexArray.setHexList(hexStrList)
-        self.value = self.hexToVal(self.valueHexArray.getDecimal())
+        self.value = self.hexToVal(self.valueHexArray.hexToDcimal())
         
     def setOffsetHexList(self, hexStrList):
         self.offsetHexArray.setHexList(hexStrList)
-        self.offset = self.hexToVal(self.offsetHexArray.getDecimal())
+        self.offset = self.hexToVal(self.offsetHexArray.hexToDecimal())
         
     def setZeroValueHex(self, hx):
         self.zeroValueHex = hx
