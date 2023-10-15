@@ -10,7 +10,7 @@ import CGY521
 import CI2cRPi
 import time
 
-gy521 = CGY521.CGY521(CI2cRPi.CI2cRPi(busId = 1, i2cAddress = 0x68))
+gy521 = CGY521.CGY521(CI2cRPi.CI2cRPi(busId = 1, i2cAddress = CGY521.i2cDefaultAddress, rate = 115200))
 pre = time.time()
 after = time.time()
 
@@ -26,7 +26,7 @@ for i in range(100):
     pre = after
     after = time.time()
     
-    
+#0.11 sec / cycle( with sleep 0.1)
     
 
 

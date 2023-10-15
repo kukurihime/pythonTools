@@ -11,6 +11,9 @@ import CI2cSensor
 import CVirtualI2c
 import time
 
+def i2cDefaultAddress():
+    return 0x68
+
 class CGY521(CI2cSensorCluster.CI2cSensorCluster):
     def __init__(self, i2cModule : CVirtualI2c.CVirtualI2c):
         super().__init__(i2cModule = i2cModule)

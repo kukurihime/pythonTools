@@ -7,7 +7,7 @@ Created on Mon Jan  4 15:22:13 2021
 """
 
 class CVirtualI2c:
-    def __init__(self, busId = 0, i2cAddress = 0x00, rate = 100000):
+    def __init__(self, busId = 0, i2cAddress = 0x00, rate = 115200):
         self.i2cAddress = i2cAddress
         self.rate = rate
         self.busId = busId

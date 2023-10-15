@@ -30,7 +30,7 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
     
 
 class CI2cRPi(CVirtualI2c.CVirtualI2c):
-    def __init__(self, busId = 0, i2cAddress = 0x00, rate = 100000 ):
+    def __init__(self, busId = 0, i2cAddress = 0x00, rate = 115200 ):
         super().__init__(busId, i2cAddress, rate)
         self.smb = CSmbusSingleton(busId)
     
