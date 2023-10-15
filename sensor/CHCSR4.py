@@ -26,7 +26,7 @@ class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
         self.resolution = 1 / 1000 / 1000 #m / sec^2
         self.zeroValueHex = 0x000000
         
-        self.distanceSensor = CI2cSensor.CI2cSensor(i2cModule = self.i2cModule, i2cRegisterStartAddress = self.distanceStartAddress0, addressLength = self.length,
+        self.distanceSensor = CI2cSensor.CI2cSensor(i2cModule = self.i2cModule, i2cRegisterStartAddress = self.distanceStartAddress, addressLength = self.length,
                                           resolution = self.resolution, zeroValueHex =self.zeroValueHex, signed = self.signed, endian = self.endian,
                                           role = 'distance')
         self.addSensor(self.distanceSensor)
