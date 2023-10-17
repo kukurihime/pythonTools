@@ -40,9 +40,7 @@ class CHCSR4(CI2cSensorCluster.CI2cSensorCluster):
     def initialize(self):
         pass
     
-    def preOperation(self):
-        self.measure()
-    
     def measure(self):
         self.i2cModule.sendByteData(self.mesureOrderAddress, self.measureOrder)
         time.sleep(self.measureWaitTime)
+        

@@ -38,6 +38,10 @@ class CDigitalSensor(CSensor.CSensor):
         return (hx - self.zeroValueHex) * self.resolution 
     
 
+    
+    
+    
+
 if __name__ == '__main__':
     
     ds = CDigitalSensor( resolution = 0.1 )

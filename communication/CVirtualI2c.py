@@ -52,6 +52,7 @@ class CVirtualI2c:
     def detectAll(self):
         return [None]
     
+    
         
 if __name__ == '__main__':
     vi2c = CVirtualI2c(busId = 1, i2cAddress = 0x68, rate = 1000)

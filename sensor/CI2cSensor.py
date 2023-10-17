@@ -34,11 +34,8 @@ class CI2cSensor(CDigitalSensor.CDigitalSensor):
         self.i2cModule = module
     
     def read(self):
-        self.preOperation()
         byteArray = [self.i2cModule.getByteData(self.i2cRegisterStartAddress  + i ) for i in range(self.registerAddressLength)]
         self.setValueHexList(byteArray)
     
-    def preOperation(self):
-        pass
 if __name__ == '__main__':
     i2cm = CVirtualI2c.CVirtualI2c()
