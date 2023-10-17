@@ -17,7 +17,7 @@ after = time.time()
 time.sleep(1)
 for i in range(100):
     hcsr4.measure()
-    time.sleep(0.15)
+    time.sleep(0.2)
     hcsr4.readCategory('distance')
     print(i, ":", after - pre)
     print('distance:', hcsr4.getCategoryVal('distance'))
