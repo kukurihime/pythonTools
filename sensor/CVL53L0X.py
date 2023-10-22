@@ -23,7 +23,7 @@ class CVL53L0XUnit(CI2cSensor.CI2cSensor):
         self.vl53 = _VL53L0X.VL53L0X()
         
     def read(self):
-        self.value = self.vl53.get_distance()
+        self.value = self.vl53.get_distance() / 1000 #m
         
     def startRanging(self, mode):
         self.vl53.start_ranging(mode)
