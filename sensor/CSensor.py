@@ -44,6 +44,8 @@ class CSensor:
         #update valueHex
         pass
     
+    
+    
 if __name__ == '__main__':
     s = CSensor('acce')
     print(s.getRole())

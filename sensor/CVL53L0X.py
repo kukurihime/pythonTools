@@ -22,9 +22,8 @@ class CVL53L0XUnit(CI2cSensor.CI2cSensor):
                          None, 0x00, signed = False, endian = 'Big', role = 'distance')
         self.vl53 = _VL53L0X.VL53L0X()
         
-        
     def read(self):
-        self.value = self.vl53.get_distance()
+        self.value = self.vl53.get_distance() 
         
 
 class CVL53L0X(CI2cSensorCluster.CI2cSensorCluster):
