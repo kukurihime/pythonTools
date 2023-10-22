@@ -25,10 +25,10 @@ class CVL53L0XUnit(CI2cSensor.CI2cSensor):
     def read(self):
         self.value = self.vl53.get_distance()
         
-    def start_ranging(self, mode):
+    def startRanging(self, mode):
         self.vl53.startRanging(self.my_object_number, mode, self.device_address, self.TCA9548A_Device, self.TCA9548A_Address)
         
-    def stop_ranging(self):
+    def stopRanging(self):
         self.vl53.stopRanging(self.my_object_number)
 
         
@@ -40,7 +40,7 @@ class CVL53L0X(CI2cSensorCluster.CI2cSensorCluster):
         self.addSensor(self.distanceSensor)
         
     def initialize(self):
-        self.distanceSensor.start_ranging(_VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+        self.distanceSensor.startRanging(_VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
     
     def preOperation(self):
         pass
