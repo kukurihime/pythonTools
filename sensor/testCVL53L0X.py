@@ -16,7 +16,6 @@ after = time.time()
 
 time.sleep(1)
 for i in range(100):
-    vl53.measure()
     time.sleep(0.2)
     vl53.readCategory('distance')
     print(i, ":", after - pre)
