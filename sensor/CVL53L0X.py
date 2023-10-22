@@ -33,7 +33,7 @@ class CVL53L0X(CI2cSensorCluster.CI2cSensorCluster):
         self.addSensor(self.distanceSensor)
         
     def initialize(self):
-        self.vl53.start_ranging(_VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
+        self.distanceSensor.start_ranging(_VL53L0X.VL53L0X_BETTER_ACCURACY_MODE)
     
     def preOperation(self):
         pass
