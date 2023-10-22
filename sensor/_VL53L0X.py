@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import time
 from ctypes import *
 import smbus
 
@@ -65,7 +64,7 @@ def i2c_write(address, reg, data_p, length):
     return ret_val
 
 # Load VL53L0X shared lib 
-tof_lib = CDLL("../vl53l0x_python.so")
+tof_lib = CDLL("./lib/vl53l0x/vl53l0x_python.so")
 
 # Create read function pointer
 READFUNC = CFUNCTYPE(c_int, c_ubyte, c_ubyte, POINTER(c_ubyte), c_ubyte)
