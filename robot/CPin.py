@@ -67,7 +67,7 @@ class CPwmPin(CPin):
         else:
             self.freq = freq
         
-    def pwmDuty(self, dutyRatio):
+    def pwmDuty(self, dutyRatio) -> int:
         if dutyRatio < 0:
             dutyRatio = 0
         elif dutyRatio > 1:

@@ -30,7 +30,7 @@ class CFFT:
     def setSamplingErrorRate(self, rate):
         self.samlingErrorRate = rate
         
-    def setDataCheckMode(self, mode):
+    def setDataCheckMode(self, mode) -> bool:
         if mode == 'errorStop':
             self.dataCheckMode = self.dataCheckModeDict[mode]
             return True

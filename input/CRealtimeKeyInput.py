@@ -25,7 +25,7 @@ class CRealtimeKeyInput(threading.Thread):
         
         termios.tcsetattr(self.fd, termios.TCSANOW, self.newTermios)
 
-    def hasNewKey(self):
+    def hasNewKey(self) -> bool:
         return self.newFlg
 
     def getKeyInput(self):
@@ -38,7 +38,7 @@ class CRealtimeKeyInput(threading.Thread):
         print( self.key, end = '')
         sys.stdout.flush()
             
-    def getKey(self):
+    def getKey(self) -> str:
         self.newFlg= False
         return self.key
     

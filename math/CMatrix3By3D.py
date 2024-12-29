@@ -78,7 +78,7 @@ class CMatrix3By3D:
              - self.array[0][1] * self.array[1][0] * self.array[2][2]\
              - self.array[0][0] * self.array[1][2] * self.array[2][1]
              
-    def haveInverseMatrix(self, digit : int = -1):
+    def haveInverseMatrix(self, digit : int = -1) -> bool:
         if digit == -1:
             if self.determinant() == 0:
                 return False

@@ -29,8 +29,7 @@ class CSmbusSingleton(metaclass = CSingletonMeta.CSingletonMeta):
     def clsGetSmbus(cls):
         return cls.smb
     
-
-
+    
 class CI2C:
     def __init__(self, I2CAddress = 0x00, rate = 100000, busNo = 1):
         self.I2CAddress = I2CAddress

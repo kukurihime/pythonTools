@@ -5,53 +5,42 @@ Created on Sun May  2 01:25:12 2021
 
 @author: kukurihime
 """
+
 import os
-import sys
 import hashlib
-import glob
 
 class CFileUtil:
     def __init__(self):
         self.fp = None
         self.path = ""
-        self.searchPath = [ './' ]
+        self.searchPathList = [ './' ]
         self.fpIs = False
         
-    def setSearchPathList(self, pathList):
-        self.searchPath = pathList
         
-    def addSearchPath(self, path):
-        self.searchPath.append( path )
-        
-    def fileExistsInSearchPath( self, searchFileName ):
-        for p in self.searchPath:
-            if os.path.isfile( p + searchFileName):
-                return True
-            else:
-                pass
-        return False
-    
-    def getFullPathInSearchPath(self, searchFileName ):
-        for p in self.searchPath:
-            if os.path.isfile( p + searchFileName):
-                return p + searchFileName
-            else:
-                pass
-        return False
-        
-
-        
+    '''
+    openFile() open file at self.path.
+    '''
     def openFile(self):
         self.fp = open(self.path)
-        
-    def openFileByPath(self, path):
+    
+    '''
+    openFileByPath() open file at the path
+    '''
+    def openFileByPath(self, path : str):
         self.path = os.path.expanduser(path)
         self.openFile()
         
+    '''
+    closeFile() close the opened file 
+    '''
     def closeFile(self):
         if self.fpIs:
             self.fp.close()
-            
+    
+    '''
+    readAsDictionary return dictionary which is splited file by splitter
+    you must execute openfile() before executing readAsDictionary()
+    '''
     def readAsDictionary(self, splitter):
         ret = {}
         contents = self.fp.readlines()
@@ -62,8 +51,10 @@ class CFileUtil:
                 ret[content[0]] = content[1]
             
         return ret
-    
-    def isSameFile(self, file1, file2):
+    '''
+    isSameFile() compare first file to second file by file hash.
+    '''
+    def isSameFile(self, file1, file2) -> bool:
         if os.path.isfile(file1):
             f1 = open(file1, 'rb').read()
             h1 = hashlib.sha256(f1).hexdigest()
@@ -80,22 +71,6 @@ class CFileUtil:
         else:
             return False
     
-    def getFilenameList(self, path = './'):
-        if path == '':
-            path = './'
-        
-        if path[-1:] != '/':
-            path = path + '/'
-        
-        path = path + '*'
-        ret = glob.glob(path)
-        ret = [os.path.split(file)[1] for file in ret]
-        return ret
-    
-    def getSameFilenameList(self, path1, path2):
-        fileList1 = self.getFilenameList(path1)
-        fileList2 = self.getFilenameList(path2)
-        ret = list( set(fileList1) & set(fileList2))
-        return ret
-        
+if __name__ == "__main__":
+    obj = CFileUtil()
     

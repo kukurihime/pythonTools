@@ -36,9 +36,9 @@ class CSQLiteOperator:
         
     def connectReadOnly(self, path = './'):
         dbName = f'file:{self.dbName}?mode=ro'
-        print(dbName)
+        #print(dbName)
         self.db = sq.connect( dbName, uri = True )
-        print(self.db)
+        #print(self.db)
         if self.db != None:
             self.cursor = self.db.cursor()
             self.connectedFlg = True

@@ -8,7 +8,7 @@ Created on Sat Jul 30 14:02:06 2022
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
-import time
+
 matplotlib.use('TkAgg')
 
 class CGraphData:

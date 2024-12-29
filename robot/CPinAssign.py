@@ -6,7 +6,6 @@ Created on Sat Feb 11 21:35:38 2023
 @author: kukurihime
 """
 
-import CPin
 import CMotorDriver
 
 class CPinAssign:
@@ -29,7 +28,6 @@ class CPinAssign:
     
 if __name__ == "__main__":
     import CRpiPin
-    import CMotorDriver
     import time
     
     class test(CPinAssign):

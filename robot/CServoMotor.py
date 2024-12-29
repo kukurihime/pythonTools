@@ -37,6 +37,7 @@ class CVirtualServoMotor:
             self.err = self.errDict[0]
             
         self.target.setAngle(target)
+        
     def getTarget(self):
         return self.target
     

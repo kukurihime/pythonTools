@@ -61,13 +61,13 @@ class CControlLoop:
     def sleepSec(self, sec):
         time.sleep(sec)
     
-    def getLoopCount(self):
+    def getLoopCount(self) -> int:
         return self.loopCount
     
-    def getExecutedLoopTime(self):
+    def getExecutedLoopTime(self) -> float:
         return self.executedLoopTime
     
-    def getSleeptedTime(self):
+    def getSleptedTime(self) -> float:
         return self.sleepedTime
     
     def getPostProcessTime(self):
