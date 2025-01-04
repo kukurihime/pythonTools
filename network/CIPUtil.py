@@ -8,15 +8,14 @@ Created on Sat Mar  9 13:52:27 2024
 
 import requests
 import socket
-import requests.packages.urllib3.util.connection
-
+import urllib3.util.connection
 
 class CIPUtil:
     def __init__(self):
         pass
     
     def getIPVersion(self):
-        ip_version = requests.packages.urllib3.util.connection.allowed_gai_family()
+        ip_version = urllib3.util.connection.allowed_gai_family()
         if ip_version == socket.AF_INET6:
             return 6
         elif ip_version == socket.AF_INET:
@@ -30,18 +29,18 @@ class CIPUtil:
         return res.text.strip()
     
     def getGlobalIPv4(self):
-        oldAllowedGaiFamily = requests.packages.urllib3.util.connection.allowed_gai_family
+        oldAllowedGaiFamily = urllib3.util.connection.allowed_gai_family
         def allowed_gai_family():
             return socket.AF_INET
         
-        requests.packages.urllib3.util.connection.allowed_gai_family = allowed_gai_family
+        urllib3.util.connection.allowed_gai_family = allowed_gai_family
         
         headers = {'User-Agent':'curl'}
         res = requests.get('https://ifconfig.io',
                            headers = headers
                            )
         
-        requests.packages.urllib3.util.connection.allowed_gai_family = oldAllowedGaiFamily
+        urllib3.util.connection.allowed_gai_family = oldAllowedGaiFamily
         
         return res.text.strip()
     

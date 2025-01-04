@@ -10,7 +10,7 @@ import pyaudio
 import wave
 
 class CSound:
-    def __init__(self, path='sound/'):
+    def __init__(self, path='./'):
         self.path = path
         self.soundDict = {}
         self.chunk = 1024
@@ -49,15 +49,10 @@ class CSound:
         
 if __name__ == '__main__':
     s = CSound()
-    s.addList('buzzer_1.wav', 'test')
+    s.addList('sound/buzzer_1.wav', 'test')
     s.repeatPlay('test')
     
     time.sleep(5)
-    
-    
-        
-    
-            
-        
+
         
         

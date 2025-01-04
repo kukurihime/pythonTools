@@ -78,11 +78,3 @@ if __name__ == "__main__":
         
     rki.finish()
     print( 'finish' )
-        
-    
-    
-    
-    
-
-        
-    
