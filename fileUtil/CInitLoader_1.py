@@ -7,7 +7,7 @@ Created on Sat Dec 24 22:08:42 2022
 """
 
 
-import CFileUtil
+import CFileUtil_1 as CFileUtil
 
 class CInitLoader:
     def __init__(self, path="", filename="init.txt", separator=":"):

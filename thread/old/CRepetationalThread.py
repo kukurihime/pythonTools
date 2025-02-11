@@ -29,7 +29,14 @@ class CRepetationalThread(threading.Thread):
     def func(self):
         return
     
+    def oneTimeRunFirst(self):
+        pass
+    
+    def oneTimeRunFinished(self):
+        pass
+    
     def run(self):
+        self.oneTimeRunFirst()
         while not(self.endFlg):
             self.startTime = time.time()
         
@@ -49,6 +56,8 @@ class CRepetationalThread(threading.Thread):
             self.cycleTime = self.endTime - self.startTime
         
             self.repetitionNum += 1
+            
+        self.oneTimeRunFinished()
         return
     
     def stop(self):

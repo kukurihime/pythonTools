@@ -6,7 +6,7 @@ Created on Tue Nov 22 14:09:49 2022
 @author: kukurihime
 """
 
-import CFileUtil
+import CFileUtil_1 as CFileUtil
 
 class CBinanceAPIKeyManager:
     def __init__(self, path):

@@ -27,15 +27,27 @@ class CRepetationalThread(threading.Thread):
         
     @abstractmethod    
     def func(self):
+        '''
+        func is executed periodically in run()
+        '''
         return
     
     def oneTimeRunFirst(self):
+        '''
+        oneTimeRunFirst is executed once before periodic func()
+        '''
         pass
     
     def oneTimeRunFinished(self):
+        '''
+        oneTimeRunFinished is executed onece after periodic func()
+        '''
         pass
     
     def run(self):
+        '''
+        run in another thread after object.start() method
+        '''
         self.oneTimeRunFirst()
         while not(self.endFlg):
             self.startTime = time.time()
@@ -58,9 +70,13 @@ class CRepetationalThread(threading.Thread):
             self.repetitionNum += 1
             
         self.oneTimeRunFinished()
+        self.finished = True
         return
     
     def stop(self):
+        '''
+        frag to run to stop
+        '''
         self.stopFlg = True
         
         
@@ -70,8 +86,8 @@ class CRepetationalThread(threading.Thread):
         
     def getRepetitionNum(self):
         return self.repetitionNum
-        
-        
+    
+
 if __name__ == "__main__":
     
     class test(CRepetationalThread):

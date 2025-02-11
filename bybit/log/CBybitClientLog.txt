@@ -1,0 +1,2 @@
+[2025-02-12 00:00:44] WARNING getFundingAssetBarance:BTC:get error
+[2025-02-12 00:22:16] WARNING getFundingAssetBarance:BTC:get error

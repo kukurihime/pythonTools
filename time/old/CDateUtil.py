@@ -13,6 +13,12 @@ class CDateUtil:
         self.date = datetime.datetime.now()
         self.startTimeInDay = datetime.time(0, 0, 0)
         self.endTimeInDay = datetime.time(23, 59,59, 999999)
+    
+    def getCreatedTime(self) -> datetime.datetime:
+        '''
+        
+        '''
+        return self.date
         
     def updateDate(self):
         self.date = datetime.datetime.now()
@@ -23,6 +29,7 @@ class CDateUtil:
     def endInDate(self, dt = datetime.datetime.now()):
         return datetime.datetime.combine(dt.date(), self.endTimeInDay)
     
+        
     
         
         

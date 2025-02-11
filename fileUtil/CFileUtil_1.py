@@ -17,31 +17,32 @@ class CFileUtil:
         self.fpIs = False
         
         
-    '''
-    openFile() open file at self.path.
-    '''
+    
     def openFile(self):
+        '''
+        openFile() open file at self.path.
+        '''
         self.fp = open(self.path)
     
-    '''
-    openFileByPath() open file at the path
-    '''
     def openFileByPath(self, path : str):
+        '''
+        openFileByPath() open file at the path
+        '''
         self.path = os.path.expanduser(path)
         self.openFile()
-        
-    '''
-    closeFile() close the opened file 
-    '''
+    
     def closeFile(self):
+        '''
+        closeFile() close the opened file 
+        '''
         if self.fpIs:
             self.fp.close()
     
-    '''
-    readAsDictionary return dictionary which is splited file by splitter
-    you must execute openfile() before executing readAsDictionary()
-    '''
-    def readAsDictionary(self, splitter):
+    def readAsDictionary(self, splitter = '=') -> dict:
+        '''
+        readAsDictionary return dictionary which is splited file by splitter
+        you must execute openfile() before executing readAsDictionary()
+        '''
         ret = {}
         contents = self.fp.readlines()
         for content in contents:
@@ -49,12 +50,13 @@ class CFileUtil:
             content = content.split(splitter)
             if len( content ) != 1:
                 ret[content[0]] = content[1]
-            
+
         return ret
-    '''
-    isSameFile() compare first file to second file by file hash.
-    '''
+    
     def isSameFile(self, file1, file2) -> bool:
+        '''
+        isSameFile() compare first file to second file by file hash.
+        '''
         if os.path.isfile(file1):
             f1 = open(file1, 'rb').read()
             h1 = hashlib.sha256(f1).hexdigest()
