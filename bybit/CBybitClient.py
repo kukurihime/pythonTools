@@ -73,7 +73,6 @@ class CBybitClient:
     '''
     asset------------------------------------------------------------------------------
     '''
-
     def AssetParser(self, msg) -> list:
         res = []
         temp = msg['result']['balance']
@@ -100,10 +99,3 @@ if __name__ == '__main__':
 
     print('getUnifiedAssetBarance')
     print(obj.getAllUnifiedAssetBarance())
-
-
-
-
-
-
-
