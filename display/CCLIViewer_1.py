@@ -3,10 +3,11 @@ import os
 import shutil
 from typing import Tuple
 from abc import ABCMeta, abstractmethod
-
+from CRepetationalThread_1 import CRepetationalThread
+import termios
 
 class CCLIViewer:
-    def __init__(self, name = 'default', paneName = 'Master', width = 128, lines = 64):
+    def __init__(self, name = 'default', paneName = 'Master', width = 128, lines = 64, frameDirection = 'h'):
         self.name = name
         self.paneName = paneName
         
@@ -25,7 +26,7 @@ class CCLIViewer:
         self.bottomLines = 1    #1 line
 
         self.paneNames = [paneName]
-        self.panes = {paneName: CPane( paneName, self.width, self._getPaneContentsLines() )}
+        self.panes = {paneName: CPane( paneName, self.width, self._getPaneContentsLines(), frameDirection = frameDirection)}
         self.activePane = self.panes[paneName]
 
         self._createTopLine()
@@ -88,7 +89,7 @@ class CCLIViewer:
         self.bottomLine = line
 
 
-    def _lineAdjust(self, line) -> str:
+    def _lineAdjust(self, line : int) -> str:
         if len( line ) > self.realWidth:
             ret = line[:self.realWidth - 3]
             ret += '...'
@@ -159,15 +160,40 @@ class CCLIViewer:
         for line in activeFrameContents:
             print(line)
         print(self.bottomLine)
+        
+class CCLIViewerAutoUpdate(CRepetationalThread):
+    def __init__(self, name = 'default', paneName = 'Master', width = 128, lines = 64, frameDirection = 'h', updateTerm = 1):
+        super().__init__(interval = updateTerm)
+        self.cliv = CCLIViewer(name, paneName, width, lines, frameDirection = frameDirection)
+    
+    def cliViewer(self) -> CCLIViewer:
+        return self.cliv
 
+    def func(self):
+        self.cliv.printAll()
+    
 
 class CPane:
-    def __init__(self, name, width, lines):
+    def __init__(self, name, width, lines, frameDirection = 'h'):
         self.name = name
         self.width = width
         self.lines = lines
         self.frameNames = [ self.name ]
-        self.frame = CLayoutFrameH(self.name, 0, 0, self.width, self.lines, parent = self.name + '.')
+        if frameDirection == 'h':
+            self.frame = CLayoutFrameH(self.name,
+                                        0,
+                                        0,
+                                        self.width,
+                                        self.lines,
+                                        parent = self.name + '.')
+        else:
+            self.frame = CLayoutFrameV(self.name,
+                                        0,
+                                        0,
+                                        self.width,
+                                        self.lines,
+                                        parent = self.name + '.')
+            
         self.frame.borderOff()
 
     def getName(self) -> str:
@@ -700,6 +726,7 @@ if __name__ == '__main__':
     '''
 
     #test total
+    '''
     def testTotal():
         obj = CCLIViewer(name = 'testTotal',paneName = 'pane1', width = 96, lines = 32)
         obj.setBottomContents( 'now testing 1...')
@@ -735,4 +762,33 @@ if __name__ == '__main__':
         obj.printAll()
 
     testTotal()
+    '''
+
+    def testCCLIViewerAutoUpdate():
+        obj = CCLIViewerAutoUpdate("test", "P1", width = 64, lines = 10, updateTerm = 0.5)
+        obj.cliViewer().setBottomContents("wait...")
+        obj.cliViewer().getPane('P1').getFrame().addFrameV('V1', 32)
+        obj.cliViewer().getPane('P1').getFrame().addFrameV('V2',16)
+        obj.cliViewer().getPane('P1').getFrame().addFrameV('V3',15)
+        obj.cliViewer().getPane('P1').getFrame().frame('V1').addContentsFrame('C1',1)
+        obj.cliViewer().getPane('P1').getFrame().frame('V2').addContentsFrame('C2',3)
+        obj.cliViewer().getPane('P1').getFrame().frame('V3').addContentsFrame('C3',3)
+        obj.cliViewer().getPane('P1').getFrame().frame('V1').frame('C1').setPrintContents("V1:loading")
+        obj.cliViewer().getPane('P1').getFrame().frame('V2').frame('C2').setPrintContents("V2:loading")
+        obj.cliViewer().getPane('P1').getFrame().frame('V3').frame('C3').setPrintContents("V3:loading")
+        obj.start()
+        obj.cliViewer().setBottomContents("testing...")
+
+        for i in range(10):
+            obj.cliViewer().getPane('P1').getFrame().frame('V1').frame('C1').setPrintContents( i )
+            obj.cliViewer().getPane('P1').getFrame().frame('V2').frame('C2').setPrintContents( i * 1.05)
+            obj.cliViewer().getPane('P1').getFrame().frame('V3').frame('C3').setPrintContents( chr(65 + i))
+            time.sleep(1)
+
+        obj.join()
+        
+    testCCLIViewerAutoUpdate()
+
+
+
     

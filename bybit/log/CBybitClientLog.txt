@@ -1,2 +1,15 @@
 [2025-02-12 00:00:44] WARNING getFundingAssetBarance:BTC:get error
 [2025-02-12 00:22:16] WARNING getFundingAssetBarance:BTC:get error
+[2025-06-14 14:29:23] WARNING getFundingAssetBarance:BTC:get error
+[2025-06-14 14:39:34] WARNING getFundingAssetBarance:BTC:get error
+[2025-06-14 15:06:06] WARNING getFundingAssetBarance:BTC:get error
+[2025-06-14 15:07:52] WARNING getFundingAssetBarance:BTC:get error
+[2025-07-20 15:33:42] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993222306],server_timestamp[1752993219312],recv_window[5000] (ErrCode: 10002). Added 2.5 seconds to recv_window. 2 retries remain.
+[2025-07-20 15:33:45] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993225761],server_timestamp[1752993222410],recv_window[7500] (ErrCode: 10002). Added 2.5 seconds to recv_window. 1 retries remain.
+[2025-07-20 15:33:48] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993228862],server_timestamp[1752993225507],recv_window[10000] (ErrCode: 10002). Added 2.5 seconds to recv_window. 0 retries remain.
+[2025-07-20 15:35:50] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993350236],server_timestamp[1752993347204],recv_window[5000] (ErrCode: 10002). Added 2.5 seconds to recv_window. 2 retries remain.
+[2025-07-20 15:35:53] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993353763],server_timestamp[1752993350410],recv_window[7500] (ErrCode: 10002). Added 2.5 seconds to recv_window. 1 retries remain.
+[2025-07-20 15:35:56] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993356859],server_timestamp[1752993353509],recv_window[10000] (ErrCode: 10002). Added 2.5 seconds to recv_window. 0 retries remain.
+[2025-07-20 15:40:11] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993610699],server_timestamp[1752993607731],recv_window[5000] (ErrCode: 10002). Added 2.5 seconds to recv_window. 2 retries remain.
+[2025-07-20 15:40:14] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993614181],server_timestamp[1752993610830],recv_window[7500] (ErrCode: 10002). Added 2.5 seconds to recv_window. 1 retries remain.
+[2025-07-20 15:40:17] ERROR invalid request, please check your server timestamp or recv_window param. req_timestamp[1752993617278],server_timestamp[1752993613923],recv_window[10000] (ErrCode: 10002). Added 2.5 seconds to recv_window. 0 retries remain.

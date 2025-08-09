@@ -1,9 +1,7 @@
 #pybit python3.9~python3.11 @2025.02.08
 
-import time
 from pybit.unified_trading import HTTP
 import CFileDictionary_1 as CFileDictionary
-import os
 import logging
 import inspect
 
@@ -28,15 +26,29 @@ class CBybitClient:
     '''
     def getFundingAssetBarance(self, coin: str) -> list:
         res = self.session.get_coins_balance(accountType = 'FUND', coin = coin)
-        temp = self.AssetParser(res)
+        #print(res)
+        if len( res['result']['balance'] ) != 0: 
+            temp = self.assetParser(res['result']['balance'][0])
+        else:
+            return []
+        
         if len(temp) == 0:
             fname = inspect.currentframe().f_code.co_name
             self.logger.warning(fname + ':' + coin + ':get error')
             return []
         else:
             return temp
+
+    def getAllFundingAssetBarance(self):
+        res = self.session.get_coins_balance(accountType = "FUND")
+        ret = []
+        for coinAsset in res['result']['balance']:
+            temp = self.assetParser( coinAsset )
+            ret.append(temp)
+
+        return ret
     
-    def getAllFundingAssetBarance(self) -> list:
+    def getAllFundingAssetBaranceInFundingCoins(self) -> list:
         res = []
         for c in self.fundingCoins:
             temp = self.getFundingAssetBarance( c )
@@ -73,14 +85,13 @@ class CBybitClient:
     '''
     asset------------------------------------------------------------------------------
     '''
-    def AssetParser(self, msg) -> list:
+    def assetParser(self, msg) -> list:
         res = []
-        temp = msg['result']['balance']
-        if len(temp) == 0:
+        if len(msg) == 0:
             return []
         else:
-            res.append(temp[0]['coin'])
-            res.append(temp[0]['walletBalance'])
+            res.append(msg['coin'])
+            res.append(msg['walletBalance'])
         return res
 
     
@@ -97,5 +108,8 @@ if __name__ == '__main__':
     print('getFundingAssetBarance')
     print(obj.getAllFundingAssetBarance())
 
-    print('getUnifiedAssetBarance')
-    print(obj.getAllUnifiedAssetBarance())
+    print('getFundingAssetBaranceInFundingCoins')
+    print(obj.getAllFundingAssetBaranceInFundingCoins())
+
+#    print('getUnifiedAssetBarance')
+#    print(obj.getAllUnifiedAssetBarance())
