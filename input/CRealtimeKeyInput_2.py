@@ -34,7 +34,7 @@ class CRealtimeKeyInput:
         return self.version
 
     def hasNewKey(self) -> bool:
-        if self.keyQueue.qsize() == 0: 
+        if self.keyQueue.qsize() == 0:
             return False
         else:
             return True

@@ -33,7 +33,43 @@ class CCLIViewer:
         self._createPaneLine()
         self.bottomLine = self._createBottomLine()
 
+    #getter / setter -------------------------------------------------
+    def getPanesNames(self) -> list[str]:
+        return self.paneNames
 
+    def getAvtivePane(self) -> CPane:
+        return self.activePane
+
+    def setBottomContents(self, contents : list):
+        self.bottomContents = contents
+        self.bottomLine = self._createBottomLine()
+
+    #/getter / setter ------------------------------------------------
+    #operate pane ----------------------------------------------------
+    def getPane(self, name: str) -> CPane:
+        if self.hasPane(name):
+            return self.panes[name]
+        return None
+
+    def addPane(self, name: str):
+        if name in self.paneNames:
+            raise KeyError('\'' + 'is already created!')
+        self.paneNames.append(name)
+        self.panes[name] = CPane(name, self.width, self._getPaneContentsLines())
+        self.paneLine = self._createPaneLine()
+
+    def hasPane(self, name: str) -> bool:
+        if name in self.paneNames:
+            return True
+        else:
+            return False
+
+    def activatePane(self, name : str):
+        if not name in self.paneNames:
+            raise KeyError( '\'' + name + '\' is not in panes!')
+        self.activePane = self.panes[name]
+    #/operate pane ---------------------------------------------------
+    #view ------------------------------------------------------------
     def _getPaneContentsLines(self):
         if self.lines > self.topLines + self.paneLines + self.bottomLines:
             return self.lines - (self.topLines + self.paneLines + self.bottomLines)
@@ -99,46 +135,6 @@ class CCLIViewer:
         return line
 
 
-    def addPane(self, name: str):
-        if name in self.paneNames:
-            raise KeyError('\'' + 'is already created!')
-        self.paneNames.append(name)
-        self.panes[name] = CPane(name, self.width, self._getPaneContentsLines())
-        self.paneLine = self._createPaneLine()
-
-
-    def getPane(self, name: str) -> CPane:
-        if self.hasPane(name):
-            return self.panes[name]
-        return None
-
-
-    def getPanesNames(self):
-        return self.paneNames
-
-
-    def getAvtivePane(self) -> CPane:
-        return self.activePane
-
-
-    def hasPane(self, name: str) -> bool:
-        if name in self.paneNames:
-            return True
-        else:
-            return False
-
-
-    def setBottomContents(self, contents : list):
-        self.bottomContents = contents
-        self.bottomLine = self._createBottomLine()
-
-
-    def activatePane(self, name : str):
-        if not name in self.paneNames:
-            raise KeyError( '\'' + name + '\' is not in panes!')
-        self.activePane = self.panes[name]
-
-    
     def updateTerminalSize(self):
         self.realTerminalSize = shutil.get_terminal_size()
         self.realWidth = self.terminalSize.columns
@@ -160,7 +156,9 @@ class CCLIViewer:
         for line in activeFrameContents:
             print(line)
         print(self.bottomLine)
-        
+
+
+
 class CCLIViewerAutoUpdate(CRepetationalThread):
     def __init__(self, name = 'default', paneName = 'Master', width = 128, lines = 64, frameDirection = 'h', updateTerm = 1):
         super().__init__(interval = updateTerm)
@@ -195,16 +193,18 @@ class CPane:
                                         parent = self.name + '.')
             
         self.frame.borderOff()
-
+    #getter / setter -----------------------------------------------
     def getName(self) -> str:
         return self.name
-
-    def getPrintContents(self):
-        return self.frame.getAllPrintContents()
 
     def getFrame(self) -> CLayoutFrameH:
         return self.frame
         
+    #/getter / setter ----------------------------------------------
+
+    def getPrintContents(self):
+        return self.frame.getAllPrintContents()
+
 
 class CFrame:
     def __init__(self,
@@ -213,7 +213,8 @@ class CFrame:
             startLines : int,
             width: int,
             lines : int,
-            parent = ''):
+            parent = ''
+            ):
         self.name = name
         self.parent = parent
         self.startWidth = startWidth
@@ -226,15 +227,13 @@ class CFrame:
 
         self.frames = {}
 
+    #getter / setter ---------------------------------------------------------
     def getName(self) -> str:
         return self.name
 
-    def getShape(self) -> Tuple[int, int, int, int]:
-        return self.startWidth, self.startLines, self.width, self.lines
-
     def getStartWidth(self) -> int:
         return self.startWidth
-    
+
     def getStartLines(self) -> int:
         return self.startLines
 
@@ -244,14 +243,19 @@ class CFrame:
     def getLines(self) -> int:
         return self.lines
 
+    def getShape(self) -> Tuple[int, int, int, int]:
+        return self.startWidth, self.startLines, self.width, self.lines
+
+    def getParentsName(self) -> str:
+        return self.parent
+
     def frame(self, name) -> CFrame:
         if not name in self.getOwnFrameNames():
             raise KeyError('There is not the frame name!')
         else:
             return self.frames[name]
 
-    def getParentsName(self) -> str:
-        return self.parent
+    #/getter / setter --------------------------------------------------------
 
     @abstractmethod
     def getPrintContents(self):
@@ -287,45 +291,83 @@ class CLayoutFrame( CFrame ):
             width : int,
             lines : int,
             direction: str,
-            parent = ''):
+            parent = '',
+            fullDisplay = False):
         super().__init__(name, startWidth, startLines, width, lines, parent = parent)
         self.direction = direction
+        self.fullDisplay = fullDisplay
         self.borderU = '-'
         self.borderR = '|'
         self.borderUR = '+'
         self.borderUFlg = True
         self.borderRFlg = True
         self.borderURFlg = True
+        if fullDisplay:
+            self.borderOff()
         self.lineContents = self.getPrintContents()
 
+    #getter / setter ------------------------------------------
+    def getOwnFramesWidth(self) -> int:
+        if self.direction == 'v':
+            return self.width
+        elif self.direction == 'h':
+            width = 0
+            for f in self.frames.values():
+                width += f.getWidth()
+            return width
 
+    def getOwnFramesLines(self) -> int:
+        if self.direction == 'h':
+            return self.lines
+        elif self.direction == 'v':
+            lines = 0
+            for f in self.frames.values():
+                lines += f.getLines()
+            return lines
+
+    def getOwnFrameNames(self):
+        return self.frames.keys()
+
+    #/getter /setter ------------------------------------------
+
+    #display control-------------------------------------------
     def borderOn(self):
         self.borderUFlg = True
         self.borderRFlg = True
         self.borderURFlg = True
-
+        
 
     def borderUOn(self):
         self.borderUFlg = True
-
+        self._updateBorderUR()
 
     def borderROn(self):
         self.borderRFlg = True
-
+        self._updateBorderUR()
 
     def borderOff(self):
-        self.borderUFlg = False
-        self.borderRFlg = False
-
+        self.borderUOff()
+        self.borderROff()
 
     def borderUOff(self):
         self.borderUFlg = False
-
+        self._updateBorderUR()
 
     def borderROff(self):
         self.borderRFlg = False
+        self._updateBorderUR()
 
+    def _updateBorderUR(self):
+        if self.borderUFlg and self.borderRFlg:
+            self.borderUR = '+'
+        elif not self.borderUFlg and self.borderRFlg:
+            self.borderUR = '|'
+        elif self.borderUFlg and not self.borderRFlg:
+            self.borderUR = '-'
+        else:
+            self.borderUR = ' '
 
+    #/display control -----------------------------------------
     def addFrame(self, name : str, ammount : int, direction : str):
         if name in self.getOwnFrameNames():
             raise KeyError('You cannot add same name frame!')
@@ -381,30 +423,17 @@ class CLayoutFrame( CFrame ):
                         ammount,
                         self._getChildsParentName())
 
+    @abstractmethod
+    def addFrameH(self, name :str, value : int):
+        pass
 
-    def getOwnFramesWidth(self) -> int:
-        if self.direction == 'v':
-            return self.width
-        elif self.direction == 'h':
-            width = 0
-            for f in self.frames.values():
-                width += f.getWidth()
-            return width
+    @abstractmethod
+    def addFrameV(self, name : str, value : int):
+        pass
 
-
-    def getOwnFramesLines(self) -> int:
-        if self.direction == 'h':
-            return self.lines
-        elif self.direction == 'v':
-            lines = 0
-            for f in self.frames.values():
-                lines += f.getLines()
-            return lines
-
-
-    def getOwnFrameNames(self):
-        return self.frames.keys()
-
+    @abstractmethod
+    def addContentsFrame(self, name : int, value : int):
+        pass
 
     def getPrintContents(self):
         
@@ -426,7 +455,6 @@ class CLayoutFrame( CFrame ):
             self.lineContents.append(line)
         return self.lineContents
 
-
     def getFreeSize(self) -> int:
         if self.direction == 'h':
             return self.width - 1 - self.getOwnFramesWidth()
@@ -434,10 +462,8 @@ class CLayoutFrame( CFrame ):
             return self.lines - 1 - self.getOwnFramesLines()
         return -1
 
-
     def _getChildsParentName(self):
         return self.parent + self.name + '.'
-
 
     def _getAllPrintContents(self, lineContents = [], depth = 0):
         self.lineContents = self.getPrintContents()
@@ -492,6 +518,67 @@ class CLayoutFrameV(CLayoutFrame):
     def addContentsFrame(self, name : str, lines: int):
         super().addFrame(name, lines, 'c')
 
+class CLayoutFrameContentsTable(CLayoutFrame):
+    def __init__(self,
+            name : str,
+            startWidth : int,
+            startLines : int,
+            width : int,
+            lines : int,
+            parent = '',
+            rows = 1,
+            columns = 1,
+            rowLines = 1,
+            columnsWidth = [1],
+            titleRowLines = 0):
+        if titleRowLines == 0:
+            super().__init__(name, startWidth, startLines, width, lines, 'h', parent = parent)
+        else:
+            super().__init__(name, startWidth, startLines, width, lines, 'v', parent = parent)
+            self.addContentsFrame()
+        self.rows = rows
+        self.columns = columns
+        self.rowLines = rowLines
+        self.columnsWidth = columnsWidth
+        self.titleRowLines = titleRowLines
+        self._checkTableShape()
+        self._createTable()
+
+    def _checkTableShape(self) -> bool:
+        if self._checkTotalWidth() == False:
+            raise ValueError
+        if self._checkTotalHight() == False:
+            raise ValueError
+
+    def _checkTotalWidth(self) -> bool:
+        totalWidth = 0
+        for width in self.columnsWidth:
+            totalWidth += width
+        if totalWidth == self.width - 1:
+            return True
+        else:
+            return False
+
+    def _checkTotalHight(self) -> bool:
+        totalLines = self.titleRowLines
+        totalLines += self.rows * self.rowLines
+        if totalLines == self.lines - 1:
+            return True
+        else:
+            return False
+
+    def _createTable(self):
+        if not self.titleRowLines == 0:
+            self.addContentsFrame
+        index = 0
+        for cw in self.columnsWidth:
+            self.addFrameV(self.name + "-" + str(index), cw)
+        
+        for frm in self.frames:
+            f
+
+
+
 class CContentsFrame ( CFrame ):
     def __init__(self,
             name : str, 
@@ -505,14 +592,12 @@ class CContentsFrame ( CFrame ):
         self.contents = ""
         self.floatDigit = 5
     
-    
+    #setter / getter ----------------------------------------------
     def setFloatDigit(self, digit : int):
         self.floatDigit = digit
 
-
     def getPrintContents(self) -> str:
         return self.lineContents
-
 
     def setPrintContents(self, contents):
         if type(contents) == float:
@@ -524,14 +609,15 @@ class CContentsFrame ( CFrame ):
         self.contents = contents
         self._updatePrintContents()
 
-
+    #/setter / getter ---------------------------------------------
+    #util ---------------------------------------------------------
     def __fillSpace(self, string : str) -> str:
         if len(string) < self.width:
             string += ' ' * (self.width - len(string))
 
         return string
 
-
+    #/util --------------------------------------------------------
     def _updatePrintContents(self):
         self.lineContents = []
         tempStr = ''
@@ -577,7 +663,7 @@ class CContentsFrame ( CFrame ):
 if __name__ == '__main__':
     import time
     #test CCLIViewer All
-    '''
+    
     def testCCLIViewer():
         obj = CCLIViewer(name = 'CCLIViewerTest')
         print('CCLIViewer Test------------')
@@ -603,11 +689,9 @@ if __name__ == '__main__':
             obj.addPane('test' + str(i))
         obj.printAll()
     
-    testCCLIViewer()
-    '''
-
-    #test CLayoutFrame
-    '''
+    #testCCLIViewer()
+    
+    #LayoutFrame----------------------------------------------------------
     def testLayoutFrame():
         print('testLayoutFrame')
 
@@ -648,12 +732,9 @@ if __name__ == '__main__':
 
         print('getOwnFrameWidth:', obj.getOwnFramesWidth())
         print('getOwnFrameLines:', obj.getOwnFramesLines())
-
-    testLayoutFrame()
-    '''
-
-    #test CLayoutFrameH / V
-    '''
+    #testLayoutFrame()
+    
+    #LayoutFrameH / V-----------------------------------------------------
     def testCLayoutFrameHV():
         print('testCLayoutFrameHV')
         obj = CLayoutFrameH('testH', 0, 0, 30, 10)
@@ -700,13 +781,24 @@ if __name__ == '__main__':
         for s in obj.getAllPrintContents():
             print(i, ': ', s)
             i = i + 1
-     
-    testCLayoutFrameHV()
-    '''
-
-
-    #test CContentsFrame
-    '''
+    #testCLayoutFrameHV()
+    
+    #LayoutFrameContentsTable---------------------------------------------
+    def testCLayoutFrameContentsTable():
+        print("testCLayoutFrameContentsTable")
+        obj = CLayoutFrameContentsTable("test",
+                                        9,
+                                        0,
+                                        30,
+                                        10,
+                                        "t",
+                                        rows = 8,
+                                        columns = 3,
+                                        rowLines = 1,
+                                        columnsWidth = [10,15,4],
+                                        titleRowLines = 1)
+    testCLayoutFrameContentsTable()
+    #ContentsFrame--------------------------------------------------------
     def testCContentsFrame():
         print('CContentsFrame test----------------------------------------------------')
         obj = CContentsFrame('test', 0, 0, 5, 3)
@@ -721,12 +813,10 @@ if __name__ == '__main__':
         obj.setPrintContents(s)
         print(obj.getPrintContents())
         print()
+    #testCContentsFrame()
     
-    testCContentsFrame()
-    '''
-
     #test total
-    '''
+    
     def testTotal():
         obj = CCLIViewer(name = 'testTotal',paneName = 'pane1', width = 96, lines = 32)
         obj.setBottomContents( 'now testing 1...')
@@ -761,8 +851,8 @@ if __name__ == '__main__':
 
         obj.printAll()
 
-    testTotal()
-    '''
+    #testTotal()
+    
 
     def testCCLIViewerAutoUpdate():
         obj = CCLIViewerAutoUpdate("test", "P1", width = 64, lines = 10, updateTerm = 0.5)
@@ -787,7 +877,7 @@ if __name__ == '__main__':
 
         obj.join()
         
-    testCCLIViewerAutoUpdate()
+    #testCCLIViewerAutoUpdate()
 
 
 

@@ -15,29 +15,32 @@ class CFileSearch:
     def __init__(self):
         self.path = ""
         self.searchPathList = [ './' ]
-    
-    '''
-    setSearchPathList() is setter for searchPathList.
-    '''
+
+#setter / getter
+
     def setSearchPathList(self, pathList : list):
+        '''
+        setSearchPathList() is setter for searchPathList.
+        '''
         self.searchPathList = pathList
     
-    '''
-    clearSearchPathList clear searchPathList.
-    '''    
+#other
     def clearSearchPathList(self):
+        '''
+        clearSearchPathList clear searchPathList.
+        '''
         self.searchPathList = []
     
-    '''
-    addSearchPath() add new path to add searchPath List.
-    '''
     def addSearchPath(self, path: str):
+        '''
+        addSearchPath() add new path to add searchPath List.
+        '''
         self.searchPathList.append( path )
     
-    '''
-    fileExistsInSearchPath() checks same files in searchPathList 
-    '''
     def fileExistsInSearchPath( self, searchFileName : str ) -> bool:
+        '''
+        fileExistsInSearchPath() checks same files in searchPathList 
+        '''
         for p in self.searchPathList:
             if os.path.isfile( p + searchFileName):
                 return True
@@ -45,12 +48,12 @@ class CFileSearch:
                 pass
         return False
     
-    '''
-    getFullPathInsearchPath() search file in searchPathList,
-    and return full path of searched file.
-    If two or more files are in searchPathList, it returns the file path at first directory in filePathList. 
-    '''
     def getFullPathInSearchPath(self, searchFileName : str ):
+        '''
+        getFullPathInsearchPath() search file in searchPathList,
+        and return full path of searched file.
+        If two or more files are in searchPathList, it returns the file path at first directory in filePathList. 
+        '''
         for p in self.searchPathList:
             if os.path.isfile( p + searchFileName):
                 return p + searchFileName
@@ -58,17 +61,45 @@ class CFileSearch:
                 pass
         return False
 
+    @classmethod
+    def getFilenameAndDirectoryList(cls, targetPath = './', returnAbsolutePathFlg = False) -> list:
+        if targetPath == '':
+            targetPath = './'
+        
+        if targetPath[-1] != '/':
+            targetPath = targetPath + '/'
+        
+        ret = glob.glob(targetPath + "*")
+        ret = [os.path.split(file)[1] for file in ret]
+        ret = [Path(path) for path in ret]
+        ret = [path.absolute() for path in ret]
+        if returnAbsolutePathFlg:
+            ret = [str(path) for path in ret]
+
+        else:
+            ret = [str(path.relative_to(Path(targetPath).absolute())) for path in ret]
+
+        return ret
+
+    @classmethod
+    def getFilenameList(cls, targetPath = './', returnAbsolutePathFlg = False) -> list:
+        ret = cls.getFilenameAndDirectoryList(targetPath = targetPath, returnAbsolutePathFlg = returnAbsolutePathFlg)
+        return [str(Path(path)) for path in ret if Path(path).is_file()]
+
+        
     
-    '''
-    getSameFilenameList() return same filename in path1 and path2
-    '''
-    def getSameFilenameList(self, directoryPath1, directoryPath2):
-        fileList1 = self.getFilenameList(directoryPath1)
-        fileList2 = self.getFilenameList(directoryPath2)
+    @classmethod
+    def getSameFilenameList(cls, directoryPath1, directoryPath2) -> list:
+        '''
+        getSameFilenameList() return same filename in path1 and path2
+        '''
+        fileList1 = cls.getFilenameList(directoryPath1)
+        fileList2 = cls.getFilenameList(directoryPath2)
         ret = list( set(fileList1) & set(fileList2))
         return ret
     
-    def directoryStringConvert(self, directoryStringList = [], targetDirectory = './', currentDirectory = False, fullPath = False, suffixSlash = True):
+    @classmethod
+    def directoryStringConvert(cls, directoryStringList = [], targetDirectory = './', currentDirectory = False, fullPath = False, suffixSlash = True):
         if len(directoryStringList) == 0:
             return []
         
@@ -94,20 +125,8 @@ class CFileSearch:
             else:
                 return directoryStringList
     
-    def getFilenameList(self, path = './'):
-        if path == '':
-            path = './'
-        
-        if path[-1:] != '/':
-            path = path + '/'
-        
-        path = path + '*'
-        ret = glob.glob(path)
-        ret = [os.path.split(file)[1] for file in ret]
-        return ret
-        
-    
-    def getDirectoryStringList(self, targetDirectory : str, parent = False, fullPath = False, suffixSlash = True, recursive = False):
+    @classmethod
+    def getDirectoryStringList(cls, targetDirectory : str, parent = False, fullPath = False, suffixSlash = True, recursive = False):
         if targetDirectory[-1] != '/':
             targetDirectory = targetDirectory + '/'
             
@@ -117,7 +136,7 @@ class CFileSearch:
             directoryList = glob.glob(pathname = targetDirectory + '**/*/', recursive = True)
             
         #print('1:\n', directoryList)
-        directoryList = self.directoryStringConvert( directoryList, targetDirectory, parent, fullPath, suffixSlash)
+        directoryList = cls.directoryStringConvert( directoryList, targetDirectory, parent, fullPath, suffixSlash)
         return directoryList
     
     def getDirectoryStringListInSearchPath(self, parent = False, fullPath = False, suffixSlash = True, recursive = False):
@@ -130,12 +149,23 @@ class CFileSearch:
 
   
 if __name__ == "__main__":
-    obj = CFileSearch()
-    '''
-    filenameList = fu.getFilenameList()
-    print( filenameList )
-    '''
-    
+    def test_getFilenameAndDirectoriesList():
+        filenameList = CFileSearch.getFilenameAndDirectoryList(returnAbsolutePathFlg = True)
+        print( filenameList )
+        filenameList = CFileSearch.getFilenameAndDirectoryList(returnAbsolutePathFlg = False)
+        print( filenameList )
+    #test_getFilenameAndDirectoriesList()
+
+    def test_getFilenameList():
+        obj = CFileSearch()
+        filenameList = obj.getFilenameList(returnAbsolutePathFlg = True)
+        print( filenameList )
+        filenameList = obj.getFilenameList(returnAbsolutePathFlg = False)
+        print( filenameList )
+
+    test_getFilenameList()
+
+'''    
     print( "test: getDirectoryStringList")
     directoryList = obj.getDirectoryStringList( "./", parent = False, fullPath = False)
     print( directoryList )
@@ -169,6 +199,6 @@ if __name__ == "__main__":
     
     
     print()
-    
+'''
 
     

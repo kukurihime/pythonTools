@@ -20,26 +20,8 @@ class CDateUtil:
 
         self.preDate = self.todayDate
     
-    @classmethod
-    def getNow(cls) -> datetime.datetime:
-        '''
-        get datetime.datetime.now()
-        '''
-        return datetime.datetime.now()
-    
-    @classmethod
-    def startInDate(cls, dt = datetime.datetime.now()) -> datetime.datetime:
-        '''
-        get start datetime in self.date
-        '''
-        return datetime.datetime.combine(dt.date(), cls.startTimeInDay)
-    @classmethod
-    def endInDate(cls, dt = datetime.datetime.now()) -> datetime.datetime:
-        '''
-        get end datetime in self.date
-        '''
-        return datetime.datetime.combine(dt.date(), cls.endTimeInDay)
 
+    #getter/setter -------------------------------------------
     def getCreatedTime(self) -> datetime.datetime:
         '''
         get object created datetime
@@ -57,7 +39,7 @@ class CDateUtil:
         get self.preDate
         '''
         return self.preDate
-    
+
     def getTodayDateStart(self) -> datetime.datetime:
         '''
         get self.todayDateStart
@@ -69,7 +51,29 @@ class CDateUtil:
         get self.todayDateEnd
         '''
         return self.todayDateEnd
-        
+    
+    #/getter/setter ------------------------------------------
+    @classmethod
+    def getNow(cls) -> datetime.datetime:
+        '''
+        get datetime.datetime.now()
+        '''
+        return datetime.datetime.now()
+    
+    @classmethod
+    def startInDate(cls, dt = datetime.datetime.now()) -> datetime.datetime:
+        '''
+        get start datetime in self.date
+        '''
+        return datetime.datetime.combine(dt.date(), cls.startTimeInDay)
+    
+    @classmethod
+    def endInDate(cls, dt = datetime.datetime.now()) -> datetime.datetime:
+        '''
+        get end datetime in self.date
+        '''
+        return datetime.datetime.combine(dt.date(), cls.endTimeInDay)
+
     def updateDate(self):
         '''
         update self.date
