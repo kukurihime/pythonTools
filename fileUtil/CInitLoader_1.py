@@ -47,11 +47,13 @@ class CInitLoader:
 
         return valueList
 
-    def __convertType(self, value, valueType ):
+    def __convertType(self, value, valueType = str ):
         if valueType == int:
-                    return int(value)
-                if valueType == float:
-                    return float(value)
+            return int(value)
+        if valueType == float:
+            return float(value)
+        if valueType == str:
+            return value
         
 if __name__ == "__main__":
     def test_getInitDictionary():

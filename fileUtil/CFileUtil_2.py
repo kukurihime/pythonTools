@@ -59,7 +59,9 @@ class CFileUtil:
         else:
             return False
     
-    #file operation
+
+    
+    #operation
     def closeFile(self):
         '''
         closeFile() close the opened file 

@@ -9,6 +9,7 @@ Created on Tue Nov 22 14:09:49 2022
 import CFileUtil_1 as CFileUtil
 
 class CFileDictionary:
+    
     def __init__(self, path, splitter = "="):
         self.dict = CFileUtil.CFileUtil()
         self.dict.openFileByPath(path)

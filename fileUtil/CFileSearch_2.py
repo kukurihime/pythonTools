@@ -8,6 +8,7 @@ Created on Sun May  2 01:25:12 2021
 
 import os
 import glob
+from typing import List
 from pathlib import Path
 
 
@@ -17,68 +18,118 @@ class CFileSearch:
         self.searchPathList = [ './' ]
 
     #setter / getter
-    def setSearchPathList(self, pathList : list):
+    def setSearchPathList(self, pathList : List[ str ]):
         '''
         setSearchPathList() is setter for searchPathList.
         '''
-        self.searchPathList = pathList
+        if len( pathList ) == 0:
+            self.searchPathList = []
+            return
+        
+        pathTrueList = []
+        for path in pathList:
+            if path[-1] != '/':
+                 path += '/'
+            pathTrueList.append( path )
+        
+        self.searchPathList = pathTrueList
     
-    #etc
+    def getSearchPathList(self) -> List[ str ]:
+        return self.searchPathList
+
+    #operation classmethod
     @classmethod
-    def getFilenameAndDirectoryList(cls, targetDirectory = './', returnAbsolutePathFlg = False, recursive = False) -> list:
+    def getFileAndDirectoryList(cls, targetDirectory = './', recursive = False ) -> List[Path]:
         if targetDirectory == '':
             targetDirectory = './'
         
         if targetDirectory[-1] != '/':
             targetDirectory = targetDirectory + '/'
-        
-        if recursive:
-            ret = glob.glob(targetDirectory + '**', root_dir = targetDirectory, recursive = True)
-            #print(ret)
-        else:
-            ret = glob.glob(targetDirectory + "*", root_dir = targetDirectory)
-            ret = [os.path.split(file)[1] for file in ret]
-    
-        
-        ret = [Path(path) for path in ret]
-        ret = [path.absolute() for path in ret]
-        if returnAbsolutePathFlg:
-            ret = [str(path) for path in ret]
 
+        if recursive:
+            ret = glob.glob( '**', root_dir = targetDirectory, recursive = True)
         else:
-            ret = [str(path.relative_to(Path(targetDirectory).absolute())) for path in ret]
+            ret = glob.glob( '**', root_dir = targetDirectory)
+            
+        ret = [Path(targetDirectory + path) for path in ret if path != './' ]
 
         return ret
 
     @classmethod
-    def getFilenameList(cls, targetDirectory = './', returnAbsolutePathFlg = False, recursive = False, extension = '*') -> list:
-        ret = cls.getFilenameAndDirectoryList(targetDirectory = targetDirectory, returnAbsolutePathFlg = returnAbsolutePathFlg, recursive = recursive)
-        ret = [str(Path(path)) for path in ret if Path(path).is_file()]
+    def getFileAndDirectoryStringList(cls, targetDirectory = './', recursive = False, absolute = True ) -> List[ str ]:
+        ret = cls.getFileAndDirectoryList(targetDirectory = targetDirectory, recursive = recursive)
+
+        if absolute:
+            return [ str( r.absolute() ) for r in ret ]
+        else:
+            return [ str(r) for r in ret ]
+
+    @classmethod
+    def getFileList(cls, targetDirectory = './', recursive = False, extension = '*') -> List[ Path ]:
+        ret = cls.getFileAndDirectoryList(targetDirectory = targetDirectory, recursive = recursive)
+        ret = [ path for path in ret if path.is_file()]
+        
         if extension == '*':
             pass
         else:
-            ret = [ path for path in ret if len(path) >= len(extension)]
-            ret = [ path for path in ret if path[-len(extension) : ] == extension ]
-
+            ret = [ path for path in ret if len( str( path ) ) >= len( extension )]
+            ret = [ path for path in ret if str( path )[-len( extension ) : ] == extension ]
+        
         return ret
 
     @classmethod
-    def getDirectoryList(cls, targetDirectory = './', returnAbsolutePathFlg = False, recursive = False, suffix = '') -> list:
-        ret = cls.getFilenameAndDirectoryList(targetDirectory = targetDirectory, returnAbsolutePathFlg = returnAbsolutePathFlg, recursive = recursive)
-        return [str(Path(path) ) + suffix for path in ret if Path(path).is_dir()]
+    def getFileStringList(cls, targetDirectory = './', recursive = False, extension = '*', absolute = True) -> List[ str ]:
+        ret = cls.getFileList(targetDirectory = targetDirectory, recursive = recursive, extension = extension)
+        if absolute:
+            return [ str( r.absolute() ) for r in ret ]
+        else:
+            return [ str(r) for r in ret ]
 
     @classmethod
-    def getSameFilenameList(cls, directoryPath1, directoryPath2) -> list:
+    def getDirectoryList(cls, targetDirectory = './', recursive = False) -> List[ Path ]:
+        ret = cls.getFileAndDirectoryList(targetDirectory = targetDirectory, recursive = recursive)
+        return [ path for path in ret if path.is_dir()]
+
+    @classmethod
+    def getDirectoryStringList(cls, targetDirectory = './', recursive = False, absolute = True ) -> List[ str ]:
+        ret = cls.getDirectoryList(targetDirectory = targetDirectory, recursive = recursive)
+        if absolute:
+            return [ str( r.absolute() ) for r in ret ]
+        else:
+            return [ str(r) for r in ret ]
+
+    @classmethod
+    def getSameFilenameList( cls, directoryPath1, directoryPath2 ) -> List[ str ]:
         '''
         getSameFilenameList() return same filename in path1 and path2
         '''
-        fileList1 = cls.getFilenameList(directoryPath1)
-        fileList2 = cls.getFilenameList(directoryPath2)
+        
+        fileList1 = cls.getFileList(targetDirectory = directoryPath1)
+        fileList2 = cls.getFileList(targetDirectory = directoryPath2)
+        fileList1 = [ f.name for f in fileList1 ]
+        fileList2 = [ f.name for f in fileList2 ]
+
         ret = list( set(fileList1) & set(fileList2))
         return ret
 
 
     #operation
+    def getDirectoryListInSearchPath(self, recursive = False ) -> List[ Path ]:
+        ret = []
+        for d in self.searchPathList:
+            directoryList = self.getDirectoryList( targetDirectory = d, recursive = recursive)
+            ret += directoryList
+        
+        return ret
+    
+    def getFileListInSearchPath(self, recursive = False, extension = '*' ) -> List[ Path ]:
+        ret = []
+        for d in self.searchPathList:
+            fileList = self.getFileList( targetDirectory = d, recursive = recursive, extension = extension)
+            ret += fileList
+        
+        return ret
+
     def clearSearchPathList(self):
         '''
         clearSearchPathList clear searchPathList.
@@ -93,18 +144,17 @@ class CFileSearch:
     
     def fileExistsInSearchPath( self, searchFileName : str ) -> bool:
         '''
-        fileExistsInSearchPath() checks same files in searchPathList 
+        fileExistsInSearchPath() checks same filenames in searchPathList 
         '''
         for p in self.searchPathList:
             if os.path.isfile( p + searchFileName):
                 return True
-            else:
-                pass
+
         return False
     
     def getFullPathInSearchPath(self, searchFileName : str ) -> str:
         '''
-        getFullPathInsearchPath() search file in searchPathList,
+        getFullPathInSearchPath() search file in searchPathList,
         and return full path of searched file.
         If two or more files are in searchPathList, it returns the file path at first directory in filePathList. 
         '''
@@ -115,78 +165,103 @@ class CFileSearch:
                 pass
         return False
 
-    def getDirectoryListInSearchPath(self, returnAbsolutePathFlg = False, recursive = False, suffix = ''):
-        ret = []
-        for d in self.searchPathList:
-            directoryList = self.getDirectoryList( targetDirectory = d, returnAbsolutePathFlg = returnAbsolutePathFlg, recursive = recursive, suffix = suffix)
-            ret += directoryList
-        
-        return ret
+
 
 
 if __name__ == "__main__":
-    def test_getFilenameAndDirectoriesList():
-        print("---absolute---")
-        filenameList = CFileSearch.getFilenameAndDirectoryList(returnAbsolutePathFlg = True)
-        for filename in filenameList:
-            print( filename )
-        print()
+    def test_setSearchPathList():
+        print("-----test_setSearchPathList()")
+        obj = CFileSearch()
+        searchPathList = ["./", "test1", "test2"]
+        obj.setSearchPathList(searchPathList)
+        for p in obj.getSearchPathList():
+            print( p )
+    test_setSearchPathList()
 
-        print("---relative---")
-        filenameList = CFileSearch.getFilenameAndDirectoryList(returnAbsolutePathFlg = False)
-        for filename in filenameList:
-            print( filename )
-        print()
-
-        print("---recursive---")
-        filenameList = CFileSearch.getFilenameAndDirectoryList(returnAbsolutePathFlg = False, recursive = True)
-        for filename in filenameList[:30]:
-            print( filename )
-    #test_getFilenameAndDirectoriesList()
-
-    def test_getFilenameList():
-        print("---absolute---")
-        filenameList = CFileSearch.getFilenameList(returnAbsolutePathFlg = True)
-        for filename in filenameList:
-            print( filename )
-        print()
-
-        print("---relative---")
-        filenameList = CFileSearch.getFilenameList(returnAbsolutePathFlg = False)
-        for filename in filenameList:
-            print( filename )
+    def test_getFileAndDirectoriesList():
+        print("-----test_getFileAndDirectoriesList()")
+        print("---not recursive---")
+        pathList = CFileSearch.getFileAndDirectoryList()
+        for path in pathList:
+            print( type(path), ":", path.absolute() )
         print()
 
         print("---recursive---")
-        filenameList = CFileSearch.getFilenameList(returnAbsolutePathFlg = False, recursive = True)
-        for filename in filenameList[:30]:
-            print( filename )
-        print()
+        pathList = CFileSearch.getFileAndDirectoryList( recursive = True)
+        for path in pathList:
+            print( type( path ) , ":", path.absolute() )
+    test_getFileAndDirectoriesList()
 
-        print("---recursive--- extention = '.py'")
-        filenameList = CFileSearch.getFilenameList(returnAbsolutePathFlg = False, recursive = True, extension = '.py')
-        for filename in filenameList[:30]:
-            print( filename )
-    test_getFilenameList()
+    def test_getFileAndDirectoryStringList():
+            print("-----test_getFileAndDirectoryStringList()")
+            print("---absolute---")
+            pathList = CFileSearch.getFileAndDirectoryStringList( recursive = True, absolute = True )
+            for path in pathList:
+                print( path )
+            print()
+    
+            print("---relative---")
+            pathList = CFileSearch.getFileAndDirectoryStringList( recursive = True, absolute = False )
+            for path in pathList:
+                print( path )
+    test_getFileAndDirectoryStringList()
+
+    def test_getFileList():
+        print("-----test_getFileList()")
+        print("---recursive---")
+        pathList = CFileSearch.getFileList( recursive = True)
+        for path in pathList:
+            print( type( path ) , ":", path.absolute() )
+
+        print("---recursive / extension = .txt---")
+        pathList = CFileSearch.getFileList( recursive = True, extension = '.txt')
+        for path in pathList:
+            print( type( path ) , ":", path.absolute() )
+    test_getFileList()
+
+    def test_getFileStringList():
+        print("-----test_getFileStringList()")
+        print("---recursive / extension = .txt---")
+        pathList = CFileSearch.getFileStringList( recursive = True, extension = '.txt')
+        for path in pathList:
+            print( type( path ) , ":", path )
+    test_getFileStringList()
+
 
     def test_getDirectoryList():
-        print("---absolute---")
-        dirList = CFileSearch.getDirectoryList(returnAbsolutePathFlg = True)
-        for dir in dirList:
-            print( dir )
-        print()
-
-        print("---relative---")
-        dirList = CFileSearch.getDirectoryList(returnAbsolutePathFlg = False)
-        for dir in dirList:
-            print( dir )
-        print()
-
+        print("-----test_getDirectoryList()")
         print("---recursive---")
-        dirList = CFileSearch.getDirectoryList(returnAbsolutePathFlg = False, recursive = True)
-        for dir in dirList[:30]:
-            print( dir )
-    #test_getDirectoryList()
+        pathList = CFileSearch.getDirectoryList( recursive = True)
+        for path in pathList:
+            print( type(path), ":", path.absolute() )
+    test_getDirectoryList()
 
+    def test_getDirectoryStringList():
+        print("-----test_getDirectoryStringList()")
+        print("---absolute---")
+        pathList = CFileSearch.getDirectoryStringList( recursive = True)
+        for path in pathList:
+            print( type(path), ":", path )
+    test_getDirectoryStringList()
 
     
+    def test_getDirectoryListInSearchPath():
+        print("-----test_getDirectoryListInSearchPath()")
+        obj = CFileSearch()
+        obj.setSearchPathList( ['./'] )
+        directories = obj.getDirectoryListInSearchPath( recursive = True )
+        for d in directories:
+            print( d.absolute() )
+    test_getDirectoryListInSearchPath()
+
+    def test_getSameFilenameList():
+        print("-----test_getSameFilenameList()")
+        dir1 = "test1"
+        dir2 = "test2"
+        print('test1:', CFileSearch.getFileList(targetDirectory = dir1 ) )
+        print('test2:', CFileSearch.getFileList(targetDirectory = dir2 ) )
+        sameFilenameList = CFileSearch.getSameFilenameList(dir1, dir2)
+        print( type( sameFilenameList ) )
+        for f in sameFilenameList:
+            print(f)
+    test_getSameFilenameList()
